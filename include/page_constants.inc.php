@@ -124,6 +124,12 @@ if (array_key_exists(TR_PRIV_HOME, $privs) && Utility::authenticate($privs[TR_PR
 
 	if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAdmin()))
 	{
+            $_pages['home/index.php']['children']  = array_merge(array('home/create_author_user_group.php'), isset($_pages['home/index.php']['children']) ? $_pages['home/index.php']['children'] : array());
+            $_pages['home/create_author_user_group.php']['title'] = 'Create User Group';
+            $_pages['home/create_author_user_group.php']['title_var'] = 'create_author_user_group';
+            $_pages['home/create_author_user_group.php']['parent']    = 'home/index.php';
+            //$_pages['home/create_course.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
+ 
 		if ((!isset($_course_id) || $_course_id == 0)) {
 			$_pages['home/index.php']['children']  = array_merge(array('home/create_course.php'), isset($_pages['home/index.php']['children']) ? $_pages['home/index.php']['children'] : array());
 			
