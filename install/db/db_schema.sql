@@ -471,6 +471,30 @@ CREATE TABLE `user_groups` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 # --------------------------------------------------------
+# Table structure for table `author_user_groups`
+# since 0.1
+
+CREATE TABLE `author_user_groups` (
+  `group_id` mediumint(8) unsigned NOT NULL auto_increment,
+  `group_name` varchar(255) NOT NULL DEFAULT '',
+  `user_id` mediumint(8) NOT NULL,
+  `description` text,
+  `create_date` datetime NOT NULL,
+  `last_update` datetime,
+  PRIMARY KEY  (`group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+# --------------------------------------------------------
+# Table structure for table `group_users`
+# since 0.1
+
+CREATE TABLE `group_users` (
+  `group_id` mediumint(8) unsigned NOT NULL ,
+  `user_id` int(8) NOT NULL,
+  PRIMARY KEY  (`group_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+# --------------------------------------------------------
 # Table structure for table `user_group_privilege`
 # since 0.1
 
