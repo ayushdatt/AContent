@@ -19,21 +19,26 @@ unset($_SESSION['course_id']);
 $results_per_page = 50;
 $dao = new DAO();
 
-// handle submit
-if ( (isset($_GET['edit']) || isset($_GET['password'])) && (isset($_GET['id']) && count($_GET['id']) > 1) ) {
-	$msg->addError('SELECT_ONE_ITEM');
-} else if (isset($_GET['edit'], $_GET['id'])) {
-	header('Location: user_create_edit.php?id='.$_GET['id'][0]);
-	exit;
-} else if (isset($_GET['password'], $_GET['id'])) {
-	header('Location: user_password.php?id='.$_GET['id'][0]);
-	exit;
-} else if ( isset($_GET['delete'], $_GET['id'])) {
-	$ids = implode(',', $_GET['id']);
-	header('Location: user_delete.php?id='.$ids);
-	exit;
-} else if (isset($_GET['edit']) || isset($_GET['delete']) || isset($_GET['password'])) {
-	$msg->addError('NO_ITEM_SELECTED');
+
+//Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
+if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
+	echo $_POST['group_name'];
+	print_r($_POST['id']);
+	global $_user_id;
+	echo "<br> global user id ".$_SESSION['user_id']."<br>";
+	for($i=0;$i<count($_POST['id']);$i++){
+		$sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
+     				        VALUES ('".$_POST['group_name']."',".$_SESSION['user_id'].",".$_POST['id'][$i].")";
+     	echo $sql;
+     	echo "<br>";
+     	try{
+     		echo "trying";
+			$dao->execute($sql);
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
 }
 
 // page initialize

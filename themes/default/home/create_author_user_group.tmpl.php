@@ -76,11 +76,11 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 
 <?php print_paginator($this->page, $this->num_results, $this->page_string . htmlspecialchars(SEP) . $this->order .'='. $this->col, $this->results_per_page); ?>
 
-<form name="form" method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form name="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
   <table class="filter">  
     <tr>
-			<th><label for="search"><?php echo _AT('search1'); ?>:</label></th>
-			<td><input type="text" name="search1" id="search" size="40" value="<?php echo htmlspecialchars($_GET['search1']); ?>" /></td>
+			<th><label for="group_name"><?php echo _AT('group_name'); ?>:</label></th>
+			<td><input type="text" name="group_name" id="search" size="40" value="<?php echo htmlspecialchars($_GET['group_name']); ?>" /></td>
     </tr>
   </table>  
 <br>
