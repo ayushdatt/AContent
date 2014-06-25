@@ -16,10 +16,37 @@ $_custom_css = TR_BASE_HREF."include/jscripts/infusion/components/inlineEdit/css
 include(TR_INCLUDE_PATH.'header.inc.php');
 ?>
 
-	<div class="input-form">
-	<fieldset class="group_form"><legend class="group_form"><?php echo _AT('create_course'); ?></legend>
-	<form name="form1" method="post" action="home/ims/ims_import.php" enctype="multipart/form-data" onsubmit="openWindow('<?php echo TR_BASE_HREF; ?>home/prog.php');">
-	
+<div class="input-form">
+	<form name="filter_form" method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>" >
+	<fieldset class="group_form"><legend class="group_form"><?php echo _AT("filter"); ?></legend>
+		<table class="filter">
+		<tr>
+			<td colspan="2"><h2><?php echo _AT('results_found', $this->num_results); ?></h2></td>
+		</tr>
+
+		<tr>
+			<th><?php echo _AT('user_status'); ?>:</th>
+			<td>
+			<input type="radio" name="status" value="0" id="s0" <?php if ($_GET['status'] == TR_STATUS_DISABLED) { echo 'checked="checked"'; } ?> /><label for="s0"><?php echo _AT('disabled'); ?></label> 
+			<input type="radio" name="status" value="1" id="s1" <?php if ($_GET['status'] == TR_STATUS_ENABLED) { echo 'checked="checked"'; } ?> /><label for="s1"><?php echo _AT('enabled'); ?></label> 
+			<input type="radio" name="status" value="" id="s" <?php if ($_GET['status'] === '') { echo 'checked="checked"'; } ?> /><label for="s"><?php echo _AT('all'); ?></label>
+			</td>
+		</tr>
+
+		<?php if (is_array($this->all_user_groups)) { ?>
+		<tr>
+			<th><label for="user_group_id"><?php echo _AT('user_group'); ?></label>:</th>
+			<td>
+			<select name="user_group_id" id="user_group_id">
+				<option value="-1">- <?php echo _AT('select'); ?> -</option>
+				<?php foreach ($this->all_user_groups as $user_group) {?>
+				<option value="<?php echo $user_group['user_group_id']; ?>" <?php if($_GET['user_group_id']==$user_group['user_group_id']) { echo 'selected="selected"';}?>><?php echo $user_group['title']; ?></option>
+				<?php } ?>
+			</select>
+			</td>
+		</tr>
+		<?php } ?>
+
 		<tr>
 			<th><label for="search"><?php echo _AT('search'); ?>:</label></th>
 			<td><input type="text" name="search" id="search" size="40" value="<?php echo htmlspecialchars($_GET['search']); ?>" /><br /><small>&middot; <?php echo _AT('login_name').', '._AT('first_name').', '._AT('last_name') .', '._AT('email'); ?></small></td>
@@ -53,7 +80,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
   <table class="filter">  
     <tr>
 			<th><label for="group_name"><?php echo _AT('group_name'); ?>:</label></th>
-			<td><input type="text" name="group_name" id="search" size="40" value="<?php echo htmlspecialchars($_GET['group_name']); ?>" /></td>
+			<td><input type="text" name="group_name" id="group_name" size="40" value="<?php echo htmlspecialchars($_GET['group_name']); ?>" /></td>
     </tr>
   </table>  
 <br>
