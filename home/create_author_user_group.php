@@ -19,24 +19,20 @@ unset($_SESSION['course_id']);
 $results_per_page = 50;
 $dao = new DAO();
 
-
 //Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
 if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
-	echo $_POST['group_name'];
-	print_r($_POST['id']);
-	global $_user_id;
-	echo "<br> global user id ".$_SESSION['user_id']."<br>";
+	extract($_POST);
+	$group_creator=$_SESSION['user_id'];
 	for($i=0;$i<count($_POST['id']);$i++){
-		$sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
-     				        VALUES ('".$_POST['group_name']."',".$_SESSION['user_id'].",".$_POST['id'][$i].")";
-     	echo $sql;
-     	echo "<br>";
-     	try{
-     		echo "trying";
-			$dao->execute($sql);
+		$sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator AND user_id=$id[$i]";
+		$result=$dao->execute($sql);
+		if($result){
+			//do nothing duplicate entry
 		}
-		catch(Exception $e){
-			echo $e->getMessage();
+		else{
+			$sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
+	     				        VALUES ('".$group_name."',".$group_creator.",".$id[$i].")";
+			$dao->execute($sql);
 		}
 	}
 }
