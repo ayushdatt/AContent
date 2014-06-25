@@ -21,12 +21,14 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 ?>
 	<div class="input-form">
 		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-		<table><tbody>
+		<h3><u>Select Content to Share</u></h3><br>
+		<table border="1"><tbody>
 		<?php
 		$userCoursesDAO = new UserCoursesDAO();
 		$output = '';
+		$session_user_id = $_SESSION['user_id'];
 		// retrieve data to display
-		$my_courses = $userCoursesDAO->getByUserID($_SESSION['user_id']); 
+		$my_courses = $userCoursesDAO->getByUserID($session_user_id); 
 
 		if (!is_array($my_courses)) {
 			$num_of_courses = 0;
@@ -47,7 +49,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 							$output .= "<td></td>";
 						}
 						if($content['content_type']==CONTENT_TYPE_CONTENT){
-							$output .= "<td><input name=\"share_content_id\" type=\"checkbox\">".$content['title']." ".$content['content_parent_id']." spaces ".$num_spaces[$content['content_parent_id']]."</td>";
+							$output .= "<td><input name=\"share_content_id[]\" value=".$content['content_id']." type=\"checkbox\">".$content['title']." ".$content['content_parent_id']." spaces ".$num_spaces[$content['content_parent_id']]."</td>";
 						}
 						else if($content['content_type']==CONTENT_TYPE_FOLDER){
 							$output .= "<td>Folder Title:- ".$content['title']." ".$content['content_parent_id']." spaces ".$num_spaces[$content['content_parent_id']]."</td>";
@@ -85,6 +87,95 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 		echo $output;
 		?>
 		</tbody></table>
+		<br>
+		<table><tbody><tr>
+		<td style="vertical-align: top;">
+			<h3><u>Select Groups to Share Content With</u></h3><br>
+			<table border="1">
+				<tbody>
+					<?php
+						$output='';
+						$dao = new DAO();
+						$usersDAO = new UsersDAO();
+						$sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_creator=$session_user_id ORDER BY group_name";
+						//echo $sql;
+						$result=$dao->execute($sql);
+						if($result){
+							//print_r($result);
+							$cur_group='';
+							$prev_group='';
+							foreach ($result as $row) {
+								$cur_group=$row['group_name'];
+								if($prev_group === ''){
+									$output .= "<tr><td><input name=\"share_group_name[]\" value=".$row['group_name']." type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
+									$prev_group=$cur_group;
+								}
+								if($prev_group !== $cur_group){
+									$output .= "<tr><td><input name=\"share_group_name[]\" value=".$row['group_name']." type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
+									$prev_group=$cur_group;								
+								}
+								$user_id=$usersDAO->getUserName($row['user_id']);
+								//$user_id = $row['user_id'];
+								if($user_id)//means that the user exists still
+									$output .= "<tr><td></td><td>$user_id</td></tr>";								
+							}
+							//do nothing duplicate entry
+						}
+						else{
+							echo "No Groups Found";
+						}
+						echo $output;
+					?>
+				</tbody>
+			</table>
+		</td>
+		<td style="vertical-align: top;">
+			<h3><u>Select Users to Share Content With</u></h3><br>
+			<table border="1">
+				<tbody>
+					<?php
+						$output='';
+						//echo $sql;
+						$result=$dao->execute($sql);
+						if($result){
+							//print_r($result);
+							$result=$usersDAO->getAll();
+							foreach ($result as $row) {
+								$cur_group=$row['group_name'];
+								$user_name='';
+
+								if ($row['first_name'] <> '' && $row['last_name'] <> '')
+								{
+									$user_name = $row['first_name']. ' '.$row['last_name'];
+								}
+								else if ($row['first_name'] <> '')
+								{
+									$user_name = $row['first_name'];
+								}
+								else if ($row['last_name'] <> '')
+								{
+									$user_name = $row['last_name'];
+								}
+								else
+								{
+									$user_name = $row['login'];
+								}
+
+								$output .= "<tr><td><input name=\"share_user_id[]\" value=".$row['user_id']." type=\"checkbox\"></td><td>$user_name</td></tr>";								
+							}
+							//do nothing duplicate entry
+						}
+						else{
+							echo "No Users Found";
+						}
+						echo $output;
+					?>
+				</tbody>
+			</table>		
+		</td>
+		</tr></tbody></table>
+		<br>
+		<input type="submit" value="Share Content">
 		</form>
 	</div>
 

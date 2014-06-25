@@ -479,7 +479,17 @@ CREATE TABLE `group_users` (
   `group_creator` mediumint(8) NOT NULL,
   `user_id` int(8) NOT NULL,  
   PRIMARY KEY  (`group_name`,`group_creator`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+# --------------------------------------------------------
+# Table structure for table `shared_content`
+# since 0.1
+
+CREATE TABLE `shared_content` (
+  `content_id` int(8) NOT NULL,  
+  `user_id` int(8) NOT NULL,  
+  PRIMARY KEY  (`content_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 # --------------------------------------------------------
 # Table structure for table `user_group_privilege`
