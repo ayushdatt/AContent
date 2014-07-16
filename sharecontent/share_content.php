@@ -34,23 +34,17 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 	if( (isset($_POST['share_group_name'])) ){
 	    foreach($share_content_id as $sci) {
 		    foreach($share_group_name as $sgn) {
-				$sql="SELECT user_id FROM ".TABLE_PREFIX."group_users WHERE group_creator=$session_user_id AND group_name='$sgn' ORDER BY group_name";
+				$sql="SELECT * FROM ".TABLE_PREFIX."shared_content_group WHERE content_id=$sci AND group_name='$sgn' AND group_creator=$session_user_id";
 				$result=$dao->execute($sql);
 				if($result){
-			        foreach ($result as $sgui) {
-			        	$sgui=$sgui['user_id'];
-						$sql="SELECT * FROM ".TABLE_PREFIX."shared_content WHERE content_id=$sci AND user_id=$sgui";
-						$result=$dao->execute($sql);
-						if($result){
-							//do nothing duplicate entry
-						}
-						else{
-							$sql="INSERT INTO ".TABLE_PREFIX."shared_content (content_id, user_id)
-					     				        VALUES (".$sci.",".$sgui.")";
-							$dao->execute($sql);
-						}
-			        }
-		    	}
+					//do nothing duplicate entry
+				}
+				else{
+					$sql="INSERT INTO ".TABLE_PREFIX."shared_content_group (content_id, group_name, group_creator)
+			     				        VALUES (".$sci.",'".$sgn."',".$session_user_id.")";
+			     	echo $sql;
+					$dao->execute($sql);
+				}
 		    }
 	    }
 	}

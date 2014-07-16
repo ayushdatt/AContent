@@ -112,12 +112,12 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 								}
 								if($prev_group !== $cur_group){
 									$output .= "<tr><td><input name=\"share_group_name[]\" value=".$row['group_name']." type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
-									$prev_group=$cur_group;								
+									$prev_group=$cur_group;
 								}
 								$user_id=$usersDAO->getUserName($row['user_id']);
 								//$user_id = $row['user_id'];
 								if($user_id)//means that the user exists still
-									$output .= "<tr><td></td><td>$user_id</td></tr>";								
+									$output .= "<tr><td></td><td>$user_id</td></tr>";
 							}
 							//do nothing duplicate entry
 						}
@@ -135,39 +135,36 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 				<tbody>
 					<?php
 						$output='';
-						//echo $sql;
-						$result=$dao->execute($sql);
-						if($result){
-							//print_r($result);
-							$result=$usersDAO->getAll();
-							foreach ($result as $row) {
-								$cur_group=$row['group_name'];
-								$user_name='';
+						$result=$usersDAO->getAll();
+						$flagFoundUsers = 0;
+						foreach ($result as $row) {
+							$flagFoundUsers = 1;
+							$cur_group=$row['group_name'];
+							$user_name='';
 
-								if ($row['first_name'] <> '' && $row['last_name'] <> '')
-								{
-									$user_name = $row['first_name']. ' '.$row['last_name'];
-								}
-								else if ($row['first_name'] <> '')
-								{
-									$user_name = $row['first_name'];
-								}
-								else if ($row['last_name'] <> '')
-								{
-									$user_name = $row['last_name'];
-								}
-								else
-								{
-									$user_name = $row['login'];
-								}
-
-								$output .= "<tr><td><input name=\"share_user_id[]\" value=".$row['user_id']." type=\"checkbox\"></td><td>$user_name</td></tr>";								
+							if ($row['first_name'] <> '' && $row['last_name'] <> '')
+							{
+								$user_name = $row['first_name']. ' '.$row['last_name'];
 							}
-							//do nothing duplicate entry
+							else if ($row['first_name'] <> '')
+							{
+								$user_name = $row['first_name'];
+							}
+							else if ($row['last_name'] <> '')
+							{
+								$user_name = $row['last_name'];
+							}
+							else
+							{
+								$user_name = $row['login'];
+							}
+
+							$output .= "<tr><td><input name=\"share_user_id[]\" value=".$row['user_id']." type=\"checkbox\"></td><td>$user_name</td></tr>";								
 						}
-						else{
+						if($flagFoundUsers === 0){
 							echo "No Users Found";
 						}
+
 						echo $output;
 					?>
 				</tbody>

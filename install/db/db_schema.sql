@@ -472,7 +472,6 @@ CREATE TABLE `user_groups` (
 
 # --------------------------------------------------------
 # Table structure for table `group_users`
-# since 0.1
 
 CREATE TABLE `group_users` (
   `group_name` varchar(255) NOT NULL DEFAULT '',
@@ -483,12 +482,21 @@ CREATE TABLE `group_users` (
 
 # --------------------------------------------------------
 # Table structure for table `shared_content`
-# since 0.1
 
 CREATE TABLE `shared_content` (
   `content_id` int(8) NOT NULL,  
   `user_id` int(8) NOT NULL,  
   PRIMARY KEY  (`content_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+# --------------------------------------------------------
+# Table structure for table `shared_content_group`
+
+CREATE TABLE `shared_content_group` (
+  `content_id` int(8) NOT NULL,  
+  `group_name` varchar(255) NOT NULL DEFAULT '',
+  `group_creator` mediumint(8) NOT NULL,
+  PRIMARY KEY  (`content_id`,`group_name`,`group_creator`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 # --------------------------------------------------------
