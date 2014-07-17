@@ -166,6 +166,6 @@ $savant->assign('orders', $orders);
 $savant->assign('order', $order);
 $savant->assign('col', $col);
 
-$savant->display('home/create_author_user_group.tmpl.php');
+$savant->display('usergroup/create_author_user_group.tmpl.php');
 
 ?>

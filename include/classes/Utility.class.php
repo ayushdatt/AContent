@@ -148,7 +148,7 @@ class Utility {
 	* @param   privilege constants
 	*          $printMsg: true or false. 
 	*                     When it's true, the function prints "NO_PRIV" error msg if the user does not have $privilegeToValidate
-	*                     When it's fales, the function returns true if the user has $privilegeToValidate, or false if the user has no $privilegeToValidate
+	*                     When it's false, the function returns true if the user has $privilegeToValidate, or false if the user has no $privilegeToValidate
 	* @return  If the caller is oauth, echo error msg.
 	*          Otherwise, the return is based on the value of $printMsg, @see @param $printMsg
 	* @author  Cindy Qi Li

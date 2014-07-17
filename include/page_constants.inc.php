@@ -40,6 +40,8 @@ define('TR_PRIV_UPDATER', 7);
 define('TR_PRIV_MANAGE_TESTS', 8);
 define('TR_PRIV_FILE_MANAGER', 9);
 define('TR_PRIV_PROFILE', 10);
+define('TR_PRIV_USER_GROUPS', 11);
+define('TR_PRIV_SHARE_CONTENT', 12);
 
 /* constants used for menu item generation. Used in class Menu (include/classes/Menu.class.php) */
 define('TR_NAV_PUBLIC', 'TR_NAV_PUBLIC');  // public menus, when no user login
@@ -130,19 +132,6 @@ if (array_key_exists(TR_PRIV_HOME, $privs) && Utility::authenticate($privs[TR_PR
 			$_pages['home/create_course.php']['title_var'] = 'create_course';
 			$_pages['home/create_course.php']['parent']    = 'home/index.php';
 			$_pages['home/create_course.php']['guide']    = 'TR_HELP_CREATE_COURSE';
-			//Create User Groups
-	        $_pages['home/index.php']['children']  = array_merge(array('home/create_author_user_group.php'), isset($_pages['home/index.php']['children']) ? $_pages['home/index.php']['children'] : array());
-	        $_pages['home/create_author_user_group.php']['title'] = 'Create User Group';
-	        $_pages['home/create_author_user_group.php']['title_var'] = 'create_author_user_group';
-	        $_pages['home/create_author_user_group.php']['parent']    = 'home/index.php';
-	        //$_pages['home/create_course.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
-
-	        //Share Content
-			$_pages['home/index.php']['children']  = array_merge(array('home/share_content.php'), isset($_pages['home/index.php']['children']) ? $_pages['home/index.php']['children'] : array());
-			$_pages['home/share_content.php']['title'] = 'Share Content';
-			$_pages['home/share_content.php']['title_var'] = 'share_content';
-			$_pages['home/share_content.php']['parent']    = 'home/index.php';
-			//$_pages['home/share_content.php']['guide']    = 'TR_HELP_SHARE_CONTENT';
 		}
 
 		$_pages['home/course/course_start.php']['title_var'] = 'course_start';
@@ -286,6 +275,44 @@ if (array_key_exists(TR_PRIV_USER_MANAGEMENT, $privs) && Utility::authenticate($
 	$_pages['user/user_group_delete.php']['parent']    = 'user/user_group.php';
 }
 
+// usergroup pages
+if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($privs[TR_PRIV_USER_GROUPS], false) && (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAdmin())))
+{
+        $_pages['usergroup/index.php']['title_var'] = 'users_groups_manage';
+	$_pages['usergroup/index.php']['parent']    = TR_NAV_TOP;
+	$_pages['usergroup/index.php']['children']  = array_merge(array('usergroup/existing_usergroups.php','usergroup/create_author_user_group.php'), 
+	                                                     isset($_pages['usergroup/index.php']['children']) ? $_pages['usergroup/index.php']['children'] : array());
+        $_pages['usergroup/index.php']['guide']    = 'TR_HELP_USERGROUP';
+        
+        /*//Existing User Groups
+        $_pages['usergroup/existing_groups.php']['title'] = 'Existing User Groups';
+	$_pages['usergroup/existing_groups.php']['title_var'] = 'existing_user_groups';
+	$_pages['usergroup/existing_groups.php']['parent']    = 'usergroup/index.php';
+        //$_pages['usergroup/existing_groups.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
+	*/
+        
+        //Create User Groups
+	$_pages['usergroup/existing_usergroups.php']['title'] = 'Existing User Groups';
+	$_pages['usergroup/existing_usergroups.php']['title_var'] = 'Existing User Groups';
+	$_pages['usergroup/existing_usergroups.php']['parent']    = 'usergroup/index.php';
+        $_pages['usergroup/existing_usergroups.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
+        
+        //Create User Groups
+	$_pages['usergroup/create_author_user_group.php']['title'] = 'Create User Group';
+	$_pages['usergroup/create_author_user_group.php']['title_var'] = 'create_author_user_group';
+	$_pages['usergroup/create_author_user_group.php']['parent']    = 'usergroup/index.php';
+        $_pages['usergroup/create_author_user_group.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
+	
+        
+	
+        /*//Share Content
+	$_pages['usergroup/share_content.php']['title'] = 'Share Content';
+	$_pages['usergroup/share_content.php']['title_var'] = 'share_content';
+	$_pages['usergroup/share_content.php']['parent']    = 'usergroup/index.php';
+        $_pages['usergroup/share_content.php']['guide']    = 'TR_HELP_SHARE_CONTENT';
+         */ 
+}
+
 // language pages
 if (array_key_exists(TR_PRIV_LANGUAGE_MANAGEMENT, $privs) && Utility::authenticate($privs[TR_PRIV_LANGUAGE_MANAGEMENT], false))
 {
@@ -353,6 +380,24 @@ if (array_key_exists(TR_PRIV_UPDATER, $privs) && Utility::authenticate($privs[TR
 
 	$_pages['updater/patch_delete.php']['title_var'] = 'delete_update';
 	$_pages['updater/patch_delete.php']['parent']    = 'updater/index.php';
+}
+// share content
+if (array_key_exists(TR_PRIV_SHARE_CONTENT, $privs) && Utility::authenticate($privs[TR_PRIV_SHARE_CONTENT], false))
+{
+	$_pages['sharecontent/index.php']['title_var'] = 'share_content';
+	$_pages['sharecontent/index.php']['parent']    = TR_NAV_TOP;
+	$_pages['sharecontent/index.php']['guide']     = 'TR_HELP_SHARE_CONTENT';
+	$_pages['sharecontent/index.php']['children']  = array('sharecontent/share_content.php', 'sharecontent/share_manage.php');
+	
+	$_pages['sharecontent/share_content.php']['title'] = 'Share Pages';
+	$_pages['sharecontent/share_content.php']['title_var'] = 'Share Pages';
+	$_pages['sharecontent/share_content.php']['parent']    = 'sharecontent/index.php';
+        $_pages['sharecontent/share_content.php']['guide']    = 'TR_HELP_SHARE_CONTENT';
+        
+        $_pages['sharecontent/share_manage.php']['title'] = 'Manage Shared Pages';
+	$_pages['sharecontent/share_manage.php']['title_var'] = 'Manage Shared Pages';
+	$_pages['sharecontent/share_manage.php']['parent']    = 'sharecontent/index.php';
+        $_pages['sharecontent/share_manage.php']['guide']    = 'TR_HELP_MANAGE_SHARE';
 }
 
 // manage tests

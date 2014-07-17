@@ -25,6 +25,12 @@ $handbook_pages = array(
                                         'user/user_group.php',
                                         'user/user_group_create_edit.php'   
                                         ),
+		'usergroup/index.php' => array(
+                                        'usergroup/create_author_user_group.php'
+                                        ),
+                'sharecontent/index.php' => array(
+                                        'sharecontent/share_content.php'
+                                        ),
 		'home/create_course.php' => array('home/course/course_property.php'),
 		'tests/index.php' => array('tests/create_test.php',
 					   'tests/edit_test.php',

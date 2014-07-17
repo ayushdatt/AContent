@@ -75,6 +75,6 @@ else{
 	//echo "things not set";
 }
 
-$savant->display('home/share_content.tmpl.php');
+$savant->display('sharecontent/share_content.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');
 ?>
