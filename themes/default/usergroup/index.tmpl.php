@@ -62,7 +62,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 		<col class="sort" />
 		<col span="<?php echo 2 + $this->col_counts; ?>" />
 	<?php elseif($this->col == 'public_field'): ?>
-		<col span="<?php echo 1 + $this->col_counts; ?>" />
+		<col span="<?php echo 2 + $this->col_counts; ?>" />
 		<col class="sort" />
 		<col span="1" />
 	<?php endif; ?>
@@ -70,7 +70,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 <thead>
 <tr>
 	<th scope="col" align="left" width="5%"><input type="checkbox" value="<?php echo _AT('select_all'); ?>" id="all" title="<?php echo _AT('select_all'); ?>" name="selectall" onclick="CheckAll();" /></th>
-	<th scope="col" width="15%"><a href="user/index.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('login_name');      ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/index.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('login_name');      ?></a></th>
 </tr>
 
 </thead>
@@ -97,7 +97,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	</tbody>
 <?php else: ?>
 	<tr>
-		<td colspan="<?php echo 8 + $this->col_counts; ?>"><?php echo _AT('none_found'); ?></td>
+		<td colspan="<?php echo 2 + $this->col_counts; ?>"><?php echo _AT('none_found'); ?></td>
 	</tr>
 <?php endif; ?>
 </table><br />
