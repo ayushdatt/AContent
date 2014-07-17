@@ -15,6 +15,7 @@
 /************************************************************************/
 
 global $_current_user;
+global $_base_path;
 
 if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAdmin()))
 {
@@ -22,7 +23,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 	<div class="input-form">
 		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<h3><u>Select Content to Share</u></h3><br>
-		<table border="1"><tbody>
+		<table><tbody>
 		<?php
 		$userCoursesDAO = new UserCoursesDAO();
 		$output = '';
@@ -41,57 +42,39 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 		    foreach ($my_courses as $row) {
 				// only display the first 200 character of course description
 				if ($row['role'] == TR_USERROLE_AUTHOR) {
-					$output .= "<tr><td><strong>Course Title:- ".$row['title']."</strong></td></tr>";
+					$output .= "<tr><td><h4>".$row['title']."</h4></td></tr>";
 					$contents=$courseContentDAO->getContentByCourseID($row['course_id']);
 					foreach($contents as $content){
-						$output .= "<tr>";
+						$output .= "<tr><td>";
 						for($i=0; $i<$num_spaces[$content['content_parent_id']];$i++){
-							$output .= "<td></td>";
+							$output .= "<img src='".$_base_path."images/tree/tree_space.gif'>";
 						}
+						$output .= "
+							<img src='".$_base_path."images/tree/tree_end.gif'>
+							<img src='".$_base_path."images/tree/tree_horizontal.gif'>
+						";
 						if($content['content_type']==CONTENT_TYPE_CONTENT){
-							$output .= "<td><input name=\"share_content_id[]\" value=".$content['content_id']." type=\"checkbox\">".$content['title']." ".$content['content_parent_id']." spaces ".$num_spaces[$content['content_parent_id']]."</td>";
+							$output .= "<input name=\"share_content_id[]\" value=".$content['content_id']." type=\"checkbox\">".$content['title'];
 						}
 						else if($content['content_type']==CONTENT_TYPE_FOLDER){
-							$output .= "<td>Folder Title:- ".$content['title']." ".$content['content_parent_id']." spaces ".$num_spaces[$content['content_parent_id']]."</td>";
+							$output .= "<strong>".$content['title']."</strong>";
 							$num_spaces[$content['content_id']]=$num_spaces[$content['content_parent_id']]+1;
 						}
-						$output .= "</tr>";
+						$output .= "</td></tr>";
 					}
 				} else {
 					echo "in else";
-					//$output .= ' <li class="theirs" title="'. _AT('others_course').': '. $row['title'].'">'."\n";
 				}
-				// $output .= '    <a href="'. TR_BASE_HREF.'home/course/index.php?_course_id='. $row['course_id'].'"'.(($_course_id == $row['course_id']) ? ' class="selected-sidemenu"' : '').'>'.$row['title'].'</a>'."\n";
-				// if ($row['role'] == TR_USERROLE_VIEWER) {
-				// 	$output .= '    <a href="'. TR_BASE_HREF.'home/'. $caller_url.'action=remove'.SEP.'cid='. $row['course_id'].'">'."\n";
-		  		// $output .= '      <img src="'. TR_BASE_HREF.'themes/'. $_SESSION['prefs']['PREF_THEME'].'/images/bookmark_remove.png" alt="'. htmlspecialchars(_AT('remove_from_list')).'" title="'. htmlspecialchars(_AT('remove_from_list')).'" border="0" class="shortcut_icon"/>'."\n";
-				// 	$output .= '    </a>'."\n";
-				// } 
-				// if ($row['role'] == NULL && $_SESSION['user_id']>0) {
-				// 	$output .= '    <a href="'. TR_BASE_HREF.'home/'. $caller_url.'action=add'.SEP.'cid='. $row['course_id'].'">'."\n";
-				// 	$output .= '      <img src="'. TR_BASE_HREF.'themes/'. $_SESSION['prefs']['PREF_THEME'].'/images/bookmark_add.png" alt="'. htmlspecialchars(_AT('add_into_list')).'" title="'. htmlspecialchars(_AT('add_into_list')).'" border="0"  class="shortcut_icon"/>'."\n";
-				// 	$output .= '    </a>'."\n";
-				// }
-
-				//already commented before
-				//$output .= '    <a href="'. TR_BASE_HREF.'home/ims/ims_export.php?course_id='. $row['course_id'].'">'."\n";
-				//$output .= '      <img src="'. TR_BASE_HREF.'themes/'. $_SESSION['prefs']['PREF_THEME'].'/images/export.png" alt="'. _AT('download_content_package').'" title="'. _AT('download_content_package').'" border="0" />'."\n";
-				//$output .= '    </a>'."\n";
-				//if ($row['role'] == TR_USERROLE_AUTHOR) {
-					//$output .= '    <a href="'. TR_BASE_HREF.'home/imscc/ims_export.php?course_id='. $row['course_id'].'">'."\n";
-					//$output .= '      <img src="'. TR_BASE_HREF.'themes/'. $_SESSION['prefs']['PREF_THEME'].'/images/export_cc.png" alt="'. _AT('download_common_cartridge').'" title="'. _AT('download_common_cartridge').'" border="0" />'."\n";
-					//$output .= '    </a>'."\n";
-				//}
 			} // end of foreach; 
 		}
 		echo $output;
 		?>
 		</tbody></table>
 		<br>
-		<table><tbody><tr>
+		<table border="1"><tbody><tr>
 		<td style="vertical-align: top;">
 			<h3><u>Select Groups to Share Content With</u></h3><br>
-			<table border="1">
+			<table>
 				<tbody>
 					<?php
 						$output='';
@@ -112,12 +95,16 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 								}
 								if($prev_group !== $cur_group){
 									$output .= "<tr><td><input name=\"share_group_name[]\" value=".$row['group_name']." type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
-									$prev_group=$cur_group;								
+									$prev_group=$cur_group;
 								}
 								$user_id=$usersDAO->getUserName($row['user_id']);
 								//$user_id = $row['user_id'];
 								if($user_id)//means that the user exists still
-									$output .= "<tr><td></td><td>$user_id</td></tr>";								
+									$output .= "<tr><td>
+										<img src='".$_base_path."images/tree/tree_space.gif'>
+										<img src='".$_base_path."images/tree/tree_end.gif'>
+										<img src='".$_base_path."images/tree/tree_horizontal.gif'>
+									</td><td>$user_id</td></tr>";
 							}
 							//do nothing duplicate entry
 						}
@@ -131,43 +118,40 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 		</td>
 		<td style="vertical-align: top;">
 			<h3><u>Select Users to Share Content With</u></h3><br>
-			<table border="1">
+			<table>
 				<tbody>
 					<?php
 						$output='';
-						//echo $sql;
-						$result=$dao->execute($sql);
-						if($result){
-							//print_r($result);
-							$result=$usersDAO->getAll();
-							foreach ($result as $row) {
-								$cur_group=$row['group_name'];
-								$user_name='';
+						$result=$usersDAO->getAll();
+						$flagFoundUsers = 0;
+						foreach ($result as $row) {
+							$flagFoundUsers = 1;
+							$cur_group=$row['group_name'];
+							$user_name='';
 
-								if ($row['first_name'] <> '' && $row['last_name'] <> '')
-								{
-									$user_name = $row['first_name']. ' '.$row['last_name'];
-								}
-								else if ($row['first_name'] <> '')
-								{
-									$user_name = $row['first_name'];
-								}
-								else if ($row['last_name'] <> '')
-								{
-									$user_name = $row['last_name'];
-								}
-								else
-								{
-									$user_name = $row['login'];
-								}
-
-								$output .= "<tr><td><input name=\"share_user_id[]\" value=".$row['user_id']." type=\"checkbox\"></td><td>$user_name</td></tr>";								
+							if ($row['first_name'] <> '' && $row['last_name'] <> '')
+							{
+								$user_name = $row['first_name']. ' '.$row['last_name'];
 							}
-							//do nothing duplicate entry
+							else if ($row['first_name'] <> '')
+							{
+								$user_name = $row['first_name'];
+							}
+							else if ($row['last_name'] <> '')
+							{
+								$user_name = $row['last_name'];
+							}
+							else
+							{
+								$user_name = $row['login'];
+							}
+
+							$output .= "<tr><td><input name=\"share_user_id[]\" value=".$row['user_id']." type=\"checkbox\"></td><td>$user_name</td></tr>";								
 						}
-						else{
+						if($flagFoundUsers === 0){
 							echo "No Users Found";
 						}
+
 						echo $output;
 					?>
 				</tbody>

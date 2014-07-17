@@ -42,7 +42,6 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 				else{
 					$sql="INSERT INTO ".TABLE_PREFIX."shared_content_group (content_id, group_name, group_creator)
 			     				        VALUES (".$sci.",'".$sgn."',".$session_user_id.")";
-			     	echo $sql;
 					$dao->execute($sql);
 				}
 		    }
