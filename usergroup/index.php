@@ -63,7 +63,8 @@ if ($_GET['reset_filter']) {
 
 $page_string = '';
 $orders = array('asc' => 'desc', 'desc' => 'asc');
-$cols   = array('login' => 1, 'public_field' => 1, 'first_name' => 1, 'last_name' => 1, 'user_group' => 1, 'email' => 1, 'status' => 1);
+//$cols   = array('login' => 1, 'public_field' => 1, 'first_name' => 1, 'last_name' => 1, 'user_group' => 1, 'email' => 1, 'status' => 1);
+$cols   = array('login' => 1);
 
 if (isset($_GET['asc'])) {
 	$order = 'asc';
@@ -94,7 +95,7 @@ if ($_GET['search']) {
 		$term = str_replace(array('%','_'), array('\%', '\_'), $term);
 		if ($term) {
 			$term = '%'.$term.'%';
-			$sql .= "((U.first_name LIKE '$term') OR (U.last_name LIKE '$term') OR (U.email LIKE '$term') OR (U.login LIKE '$term')) $predicate";
+			$sql .= "(U.login LIKE '$term') $predicate";
 		}
 	}
 	$sql = '('.substr($sql, 0, -strlen($predicate)).')';
@@ -103,14 +104,14 @@ if ($_GET['search']) {
 	$search = '1';
 }
 
-if ($_GET['user_group_id'] && $_GET['user_group_id'] <> -1) {
+/*if ($_GET['user_group_id'] && $_GET['user_group_id'] <> -1) {
 	$user_group_sql = "U.user_group_id = ".$_GET['user_group_id'];
 	$page_string .= htmlspecialchars(SEP).'user_group_id='.urlencode($_GET['user_group_id']);
 }
 else
 {
 	$user_group_sql = '1';
-}
+}*/
 
 $sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator= $group_creator";
 $rows = $dao->execute($sql);
@@ -129,10 +130,9 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 	$results_per_page = 999999;
 }
 
-$sql = "SELECT U.user_id, U.login, U.first_name, U.last_name, UG.title user_group, U.email, U.status 
-          FROM ".TABLE_PREFIX."users U, ".TABLE_PREFIX."user_groups UG
-          WHERE U.user_group_id = UG.user_group_id
-          AND U.status $status AND $search AND $user_group_sql ORDER BY $col $order LIMIT $offset, $results_per_page";
+$sql = "SELECT U.user_id, U.login
+          FROM ".TABLE_PREFIX."users U
+          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
 
