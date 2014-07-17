@@ -876,6 +876,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_template', 'upload_question', 'Upload Questions', '2010-06-25 15:03:37', ''),
 ('en', '_template', 'upload_test', 'Select Test Package to Upload', '2010-03-17 13:40:45', ''),
 ('en', '_template', 'upload_update', 'Upload a zip file to install update:', '2010-01-27 15:48:35', 'Updater'),
+('en', '_template', 'usergroups_found', 'User Groups Found: %s', '2010-01-27 15:48:35', ''),
 ('en', '_template', 'usaved_changes_made', 'Unsaved changes made', '2010-05-21 14:46:14', ''),
 ('en', '_template', 'user', 'User', '2010-01-27 15:48:35', ''),
 ('en', '_template', 'users', 'Users', '2010-01-27 15:48:35', ''),

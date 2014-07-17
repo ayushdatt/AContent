@@ -284,14 +284,7 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
 	                                                     isset($_pages['usergroup/index.php']['children']) ? $_pages['usergroup/index.php']['children'] : array());
         $_pages['usergroup/index.php']['guide']    = 'TR_HELP_USERGROUP';
         
-        /*//Existing User Groups
-        $_pages['usergroup/existing_groups.php']['title'] = 'Existing User Groups';
-	$_pages['usergroup/existing_groups.php']['title_var'] = 'existing_user_groups';
-	$_pages['usergroup/existing_groups.php']['parent']    = 'usergroup/index.php';
-        //$_pages['usergroup/existing_groups.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
-	*/
-        
-        //Create User Groups
+        //Existing User Groups
 	$_pages['usergroup/existing_usergroups.php']['title'] = 'Existing User Groups';
 	$_pages['usergroup/existing_usergroups.php']['title_var'] = 'Existing User Groups';
 	$_pages['usergroup/existing_usergroups.php']['parent']    = 'usergroup/index.php';
@@ -303,9 +296,7 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
 	$_pages['usergroup/create_author_user_group.php']['parent']    = 'usergroup/index.php';
         $_pages['usergroup/create_author_user_group.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
 	
-        
-	
-        /*//Share Content
+        /*Share Content
 	$_pages['usergroup/share_content.php']['title'] = 'Share Content';
 	$_pages['usergroup/share_content.php']['title_var'] = 'share_content';
 	$_pages['usergroup/share_content.php']['parent']    = 'usergroup/index.php';
