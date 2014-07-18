@@ -12,47 +12,29 @@
 
 define('TR_INCLUDE_PATH', '../include/');
 include(TR_INCLUDE_PATH.'vitals.inc.php');
-include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
-$results_per_page = 50;
+$results_per_page = 5;
 $dao = new DAO();
 $group_creator=$_SESSION['user_id'];
 
-// handle submit
-if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
-	extract($_POST);
-	
-	for($i=0;$i<count($_POST['id']);$i++){
-		$sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator AND user_id=$id[$i]";
-		$result=$dao->execute($sql);
-		if($result){
-			//do nothing duplicate entry
-		}
-		else{
-			$sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
-	     				        VALUES ('".$group_name."',".$group_creator.",".$id[$i].")";
-			$dao->execute($sql);
-		}
-	}
-}
-
-if ( (isset($_GET['edit']) || isset($_GET['password'])) && (isset($_GET['id']) && count($_GET['id']) > 1) ) {
+if ( (isset($_GET['edit']) || isset($_GET['view'])) && (isset($_GET['id']) && count($_GET['id']) > 1) ) {
 	$msg->addError('SELECT_ONE_ITEM');
 }
 else if (isset($_GET['edit'], $_GET['id'])) {
 	header('Location: user_create_edit.php?id='.$_GET['id'][0]);
 	exit;
-} else if (isset($_GET['password'], $_GET['id'])) {
-	header('Location: user_password.php?id='.$_GET['id'][0]);
+} else if (isset($_GET['view'], $_GET['id'])) {
+	header('Location: usergroup_view.php?id='.$_GET['id'][0]);
 	exit;
 } else if ( isset($_GET['delete'], $_GET['id'])) {
 	$ids = implode(',', $_GET['id']);
 	header('Location: user_delete.php?id='.$ids);
 	exit;
 }
-else if( (isset($_GET['edit']) || isset($_GET['delete']) || isset($_GET['password'])) && (!isset($_GET['id']))){
+else if( (isset($_GET['edit']) || isset($_GET['delete']) || isset($_GET['view'])) && (!isset($_GET['id']))){
 	$msg->addError('NO_ITEM_SELECTED');
 }
 
@@ -63,58 +45,40 @@ if ($_GET['reset_filter']) {
 
 $page_string = '';
 $orders = array('asc' => 'desc', 'desc' => 'asc');
-$cols   = array('login' => 1, 'public_field' => 1, 'first_name' => 1, 'last_name' => 1, 'user_group' => 1, 'email' => 1, 'status' => 1);
+$cols   = array('group_name' => 1);
 
 if (isset($_GET['asc'])) {
 	$order = 'asc';
-	$col   = isset($cols[$_GET['asc']]) ? $_GET['asc'] : 'login';
+	$col   = isset($cols[$_GET['asc']]) ? $_GET['asc'] : 'group_name';
 } else if (isset($_GET['desc'])) {
 	$order = 'desc';
-	$col   = isset($cols[$_GET['desc']]) ? $_GET['desc'] : 'login';
+	$col   = isset($cols[$_GET['desc']]) ? $_GET['desc'] : 'group_name';
 } else {
 	// no order set
 	$order = 'asc';
-	$col   = 'login';
+	$col   = 'group_name';
 }
 
 if ($_GET['search']) {
 	$page_string .= htmlspecialchars(SEP).'search='.urlencode($stripslashes($_GET['search']));
 	$search = $addslashes($_GET['search']);
-	$search = explode(' ', $search);
-
-	if ($_GET['include'] == 'all') {
-		$predicate = 'AND ';
-	} else {
-		$predicate = 'OR ';
-	}
-
 	$sql = '';
-	foreach ($search as $term) {
-		$term = trim($term);
-		$term = str_replace(array('%','_'), array('\%', '\_'), $term);
-		if ($term) {
+	$term = trim($search);
+        $term = str_replace(array('%','_'), array('\%', '\_'), $term);
+        if ($term) {
 			$term = '%'.$term.'%';
-			$sql .= "((U.first_name LIKE '$term') OR (U.last_name LIKE '$term') OR (U.email LIKE '$term') OR (U.login LIKE '$term')) $predicate";
+			$sql .= "(group_name LIKE '$term')";
 		}
-	}
-	$sql = '('.substr($sql, 0, -strlen($predicate)).')';
 	$search = $sql;
 } else {
 	$search = '1';
 }
 
-if ($_GET['user_group_id'] && $_GET['user_group_id'] <> -1) {
-	$user_group_sql = "U.user_group_id = ".$_GET['user_group_id'];
-	$page_string .= htmlspecialchars(SEP).'user_group_id='.urlencode($_GET['user_group_id']);
-}
-else
-{
-	$user_group_sql = '1';
-}
-
-$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator= $group_creator";
+$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator= $group_creator AND $search";
+//$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users U WHERE $search";
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
+//$num_results = 5;
 
 $num_pages = max(ceil($num_results / $results_per_page), 1);
 $page = intval($_GET['p']);
@@ -129,38 +93,25 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 	$results_per_page = 999999;
 }
 
-$sql = "SELECT U.user_id, U.login, U.first_name, U.last_name, UG.title user_group, U.email, U.status 
-          FROM ".TABLE_PREFIX."users U, ".TABLE_PREFIX."user_groups UG
-          WHERE U.user_group_id = UG.user_group_id
-          AND U.status $status AND $search AND $user_group_sql ORDER BY $col $order LIMIT $offset, $results_per_page";
+/*$sql = "SELECT U.user_id, U.login
+          FROM ".TABLE_PREFIX."users U
+          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+*/
+$sql = "SELECT distinct(group_name)
+          FROM ".TABLE_PREFIX."group_users
+          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
 
-if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
-	$ids = '';
-	while ($row = mysql_fetch_assoc($result)) {
-		$ids .= $row['user_id'].','; 
-	}
-	$ids = substr($ids,0,-1);
-	$status = intval($_GET['change_status']);
+$groupsUsersDAO = new GroupsUsersDAO();
 
-	if ($status==-1) {
-		header('Location: user_delete.php?id='.$ids);
-		exit;
-	} else {
-		header('Location: user_status.php?ids='.$ids.'&status='.$status);
-		exit;
-	}
-}
-
-$userGroupsDAO = new UserGroupsDAO();
-
+//$sql = 'SELECT * FROM '.TABLE_PREFIX.'group_users ORDER BY group_name';
+//$data_group_users=$dao->execute($sql);
+                
 $savant->assign('user_rows', $user_rows);
-$savant->assign('all_user_groups', $userGroupsDAO->getAll());
+$savant->assign('all_user_groups', $groupsUsersDAO->getAll());
 $savant->assign('results_per_page', $results_per_page);
 $savant->assign('num_results', $num_results);
-$savant->assign('checked_include_all', $checked_include_all);
-$savant->assign('col_counts', $col_counts);
 $savant->assign('page',$page);
 $savant->assign('page_string', $page_string);
 $savant->assign('orders', $orders);
