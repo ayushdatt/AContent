@@ -62,7 +62,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 <thead>
 <tr>
 	<th scope="col" align="left" width="5%"><input type="checkbox" value="<?php echo _AT('select_all'); ?>" id="all" title="<?php echo _AT('select_all'); ?>" name="selectall" onclick="CheckAll();" /></th>
-	<th scope="col" width="15%"><a href="usergroup/index.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('groupname');      ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/index.php?<?php echo $this->orders[$this->order]; ?>=group_name<?php echo $page_string; ?>"><?php echo _AT('groupname');      ?></a></th>
 </tr>
 
 </thead>
@@ -83,7 +83,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 			    id="rm<?php echo $row['group_name']; ?>">
 				<td><input type="checkbox" name="id[]" value="<?php echo $row['group_name']; ?>" id="m<?php echo $row['group_name']; ?>" 
 				           onmouseup="this.checked=!this.checked" onkeyup="this.checked=!this.checked" /></td>
-				<td><label for="m<?php echo $row['group_name']; ?>"><span class="inlineEdits" id="<?php echo "login-".$row['group_name']; ?>"><?php echo $row['group_name']; ?></span></label></td>
+				<td><label for="m<?php echo $row['group_name']; ?>"><span class="inlineEdits" id="<?php echo "group_name-".$row['group_name']; ?>"><?php echo $row['group_name']; ?></span></label></td>
 			</tr>
 		<?php }} ?>
 	</tbody>

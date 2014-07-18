@@ -12,7 +12,7 @@
 
 define('TR_INCLUDE_PATH', '../include/');
 include(TR_INCLUDE_PATH.'vitals.inc.php');
-include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
@@ -103,15 +103,13 @@ $sql = "SELECT distinct(group_name)
 
 $user_rows = $dao->execute($sql);
 
-//$userGroupsDAO = new UserGroupsDAO();
+$groupsUsersDAO = new GroupsUsersDAO();
 
-
-
-$sql = 'SELECT * FROM '.TABLE_PREFIX.'group_users ORDER BY group_name';
-$data_group_users=$dao->execute($sql);
+//$sql = 'SELECT * FROM '.TABLE_PREFIX.'group_users ORDER BY group_name';
+//$data_group_users=$dao->execute($sql);
                 
 $savant->assign('user_rows', $user_rows);
-$savant->assign('all_user_groups', $data_group_users);
+$savant->assign('all_user_groups', $groupsUsersDAO->getAll());
 $savant->assign('results_per_page', $results_per_page);
 $savant->assign('num_results', $num_results);
 $savant->assign('page',$page);

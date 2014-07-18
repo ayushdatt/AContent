@@ -12,7 +12,7 @@
 
 define('TR_INCLUDE_PATH', '../include/');
 include(TR_INCLUDE_PATH.'vitals.inc.php');
-include_once(TR_INCLUDE_PATH.'classes/DAO/UsersDAO.class.php');
+include_once(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 
 redirectNotLoggedinUsers();
 
@@ -24,11 +24,12 @@ if ($_POST['value'] == '')
 
 if (isset($_POST['field']) && isset($_POST['value']) && $_POST['value'] <> '')
 {
-	$usersDAO = new UsersDAO();
+	$groupsusersDAO = new GroupsUsersDAO();
 	
 	// Format of $_POST['field']: [fieldName]|[user_id]
 	$pieces = explode('-', $_POST['field']);
-	$status = $usersDAO->UpdateField($pieces[1], $pieces[0], $_POST['value']);
+        $pieces[1]="'$pieces[1]'";
+	$status = $groupsusersDAO->UpdateField($pieces[1], $pieces[0], $_POST['value']);
 	
 	if (is_array($status))
 	{
