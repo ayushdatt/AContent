@@ -16,7 +16,7 @@ include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
-$results_per_page = 50;
+$results_per_page = 2;
 $dao = new DAO();
 
 // handle submit

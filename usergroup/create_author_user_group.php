@@ -16,7 +16,7 @@ include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
-$results_per_page = 50;
+$results_per_page = 2;
 $dao = new DAO();
 
 //Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable

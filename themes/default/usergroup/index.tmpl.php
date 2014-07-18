@@ -30,13 +30,6 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 		</tr>
 
 		<tr>
-			<td colspan="2" align="center">
-			<input type="radio" name="include" value="all" id="match_all" <?php echo $this->checked_include_all; ?> /><label for="match_all"><?php echo _AT('match_all_words'); ?></label> 
-			<input type="radio" name="include" value="one" id="match_one" <?php echo $this->checked_include_one; ?> /><label for="match_one"><?php echo _AT('match_any_word'); ?></label>
-			</td>
-		</tr>
-
-		<tr>
 			<td colspan="2"><p class="submit_button">
 			<input type="submit" name="filter" value="<?php echo _AT('filter'); ?>" />
 			<input type="submit" name="reset_filter" value="<?php echo _AT('reset_filter'); ?>" />
@@ -53,7 +46,6 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 
 <form name="form" method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>" />
-<input type="hidden" name="include" value="<?php echo htmlspecialchars($_GET['include']); ?>" />
 
 <table summary="<?php echo _AT('user_table_summary'); ?>" class="data" rules="rows" id="editable_table">
 <colgroup>
@@ -79,7 +71,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	<tr>
 		<td colspan="<?php echo 3 + $this->col_counts; ?>">
 			<input type="submit" name="edit" value="<?php echo _AT('edit'); ?>" /> 
-			<input type="submit" name="password" value="<?php echo _AT('password'); ?>" />
+			<input type="submit" name="view" value="<?php echo _AT('view'); ?>" />
 			<input type="submit" name="delete" value="<?php echo _AT('delete'); ?>" />
 		</td>
 	</tr>
