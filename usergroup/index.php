@@ -16,7 +16,7 @@ include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
-$results_per_page = 2;
+$results_per_page = 5;
 $dao = new DAO();
 $group_creator=$_SESSION['user_id'];
 
@@ -45,18 +45,18 @@ if ($_GET['reset_filter']) {
 
 $page_string = '';
 $orders = array('asc' => 'desc', 'desc' => 'asc');
-$cols   = array('login' => 1);
+$cols   = array('group_name' => 1);
 
 if (isset($_GET['asc'])) {
 	$order = 'asc';
-	$col   = isset($cols[$_GET['asc']]) ? $_GET['asc'] : 'login';
+	$col   = isset($cols[$_GET['asc']]) ? $_GET['asc'] : 'group_name';
 } else if (isset($_GET['desc'])) {
 	$order = 'desc';
-	$col   = isset($cols[$_GET['desc']]) ? $_GET['desc'] : 'login';
+	$col   = isset($cols[$_GET['desc']]) ? $_GET['desc'] : 'group_name';
 } else {
 	// no order set
 	$order = 'asc';
-	$col   = 'login';
+	$col   = 'group_name';
 }
 
 if ($_GET['search']) {
@@ -67,15 +67,15 @@ if ($_GET['search']) {
         $term = str_replace(array('%','_'), array('\%', '\_'), $term);
         if ($term) {
 			$term = '%'.$term.'%';
-			$sql .= "(U.login LIKE '$term')";
+			$sql .= "(group_name LIKE '$term')";
 		}
 	$search = $sql;
 } else {
 	$search = '1';
 }
 
-//$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator= $group_creator";
-$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users U WHERE $search";
+$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator= $group_creator AND $search";
+//$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users U WHERE $search";
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
 //$num_results = 5;
@@ -93,37 +93,27 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 	$results_per_page = 999999;
 }
 
-$sql = "SELECT U.user_id, U.login
+/*$sql = "SELECT U.user_id, U.login
           FROM ".TABLE_PREFIX."users U
+          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+*/
+$sql = "SELECT distinct(group_name)
+          FROM ".TABLE_PREFIX."group_users
           WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
 
-if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
-	$ids = '';
-	while ($row = mysql_fetch_assoc($result)) {
-		$ids .= $row['user_id'].','; 
-	}
-	$ids = substr($ids,0,-1);
-	$status = intval($_GET['change_status']);
+//$userGroupsDAO = new UserGroupsDAO();
 
-	if ($status==-1) {
-		header('Location: user_delete.php?id='.$ids);
-		exit;
-	} else {
-		header('Location: user_status.php?ids='.$ids.'&status='.$status);
-		exit;
-	}
-}
 
-$userGroupsDAO = new UserGroupsDAO();
 
+$sql = 'SELECT * FROM '.TABLE_PREFIX.'group_users ORDER BY group_name';
+$data_group_users=$dao->execute($sql);
+                
 $savant->assign('user_rows', $user_rows);
-$savant->assign('all_user_groups', $userGroupsDAO->getAll());
+$savant->assign('all_user_groups', $data_group_users);
 $savant->assign('results_per_page', $results_per_page);
 $savant->assign('num_results', $num_results);
-$savant->assign('checked_include_all', $checked_include_all);
-$savant->assign('col_counts', $col_counts);
 $savant->assign('page',$page);
 $savant->assign('page_string', $page_string);
 $savant->assign('orders', $orders);

@@ -26,7 +26,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 
 		<tr>
 			<th><label for="search"><?php echo _AT('search'); ?>:</label></th>
-			<td><input type="text" name="search" id="search" size="40" value="<?php echo htmlspecialchars($_GET['search']); ?>" /><br /><small>&middot; <?php echo _AT('login_name').', '._AT('first_name').', '._AT('last_name') .', '._AT('email'); ?></small></td>
+			<td><input type="text" name="search" id="search" size="40" value="<?php echo htmlspecialchars($_GET['search']); ?>" /><br /></td>
 		</tr>
 
 		<tr>
@@ -49,7 +49,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 
 <table summary="<?php echo _AT('user_table_summary'); ?>" class="data" rules="rows" id="editable_table">
 <colgroup>
-	<?php if ($this->col == 'login'): ?>
+	<?php if ($this->col == 'group_name'): ?>
 		<col />
 		<col class="sort" />
 		<col span="<?php echo 2 + $this->col_counts; ?>" />
@@ -62,7 +62,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 <thead>
 <tr>
 	<th scope="col" align="left" width="5%"><input type="checkbox" value="<?php echo _AT('select_all'); ?>" id="all" title="<?php echo _AT('select_all'); ?>" name="selectall" onclick="CheckAll();" /></th>
-	<th scope="col" width="15%"><a href="usergroup/index.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('login_name');      ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/index.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('groupname');      ?></a></th>
 </tr>
 
 </thead>
@@ -78,12 +78,12 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	</tfoot>
 	<tbody>
 		<?php if (is_array($this->user_rows)){ foreach ($this->user_rows as $row) {?>
-			<tr onmousedown="document.form['m<?php echo $row['user_id']; ?>'].checked = !document.form['m<?php echo $row['user_id']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['user_id']; ?>');" 
-			    onkeydown="document.form['m<?php echo $row['user_id']; ?>'].checked = !document.form['m<?php echo $row['user_id']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['user_id']; ?>');"
-			    id="rm<?php echo $row['user_id']; ?>">
-				<td><input type="checkbox" name="id[]" value="<?php echo $row['user_id']; ?>" id="m<?php echo $row['user_id']; ?>" 
+			<tr onmousedown="document.form['m<?php echo $row['group_name']; ?>'].checked = !document.form['m<?php echo $row['group_name']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['group_name']; ?>');" 
+			    onkeydown="document.form['m<?php echo $row['group_name']; ?>'].checked = !document.form['m<?php echo $row['group_name']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['group_name']; ?>');"
+			    id="rm<?php echo $row['group_name']; ?>">
+				<td><input type="checkbox" name="id[]" value="<?php echo $row['group_name']; ?>" id="m<?php echo $row['group_name']; ?>" 
 				           onmouseup="this.checked=!this.checked" onkeyup="this.checked=!this.checked" /></td>
-				<td><label for="m<?php echo $row['user_id']; ?>"><span class="inlineEdits" id="<?php echo "login-".$row['user_id']; ?>"><?php echo $row['login']; ?></span></label></td>
+				<td><label for="m<?php echo $row['group_name']; ?>"><span class="inlineEdits" id="<?php echo "login-".$row['group_name']; ?>"><?php echo $row['group_name']; ?></span></label></td>
 			</tr>
 		<?php }} ?>
 	</tbody>
