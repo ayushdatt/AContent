@@ -296,6 +296,9 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
 	$_pages['usergroup/create_author_user_group.php']['parent']    = 'usergroup/index.php';
         $_pages['usergroup/create_author_user_group.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
 	
+        $_pages['usergroup/usergroup_delete.php']['title_var'] = 'delete_user';
+	$_pages['usergroup/usergroup_delete.php']['parent']    = 'usergroup/index.php';
+
         /*Share Content
 	$_pages['usergroup/share_content.php']['title'] = 'Share Content';
 	$_pages['usergroup/share_content.php']['title_var'] = 'share_content';

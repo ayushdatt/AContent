@@ -160,16 +160,7 @@ class GroupsUsersDAO extends DAO {
 	 */
 	public function Delete($Group_name)
 	{
-		//$userGroupID = intval($userGroupID);
-		// delete user_group_privilege
-		//include_once(TR_INCLUDE_PATH.'classes/DAO/UserGroupPrivilegeDAO.class.php');
-		
-		//$userGroupPrivilegeDAO = new UserGroupPrivilegeDAO();
-		//$userGroupPrivilegeDAO->DeleteByUserGroupID($userGroupID);
-		
-		// delete groups_users
-		$sql = 'DELETE FROM '.TABLE_PREFIX.'group_users WHERE group_name = '.$Group_name;
-		
+		$sql = 'DELETE FROM '.TABLE_PREFIX.'group_users WHERE group_name = '.$Group_name.' AND group_creator='.$_SESSION['user_id'];	
 		return $this->execute($sql);
 	}
 	
