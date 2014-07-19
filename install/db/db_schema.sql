@@ -486,6 +486,7 @@ CREATE TABLE `group_users` (
 CREATE TABLE `shared_content` (
   `content_id` int(8) NOT NULL,  
   `user_id` int(8) NOT NULL,  
+  `content_author_id` int(8) NOT NULL,
   PRIMARY KEY  (`content_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

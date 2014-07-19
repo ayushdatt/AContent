@@ -31,7 +31,7 @@ else if (isset($_GET['edit'], $_GET['id'])) {
 	exit;
 } else if ( isset($_GET['delete'], $_GET['id'])) {
 	$ids = implode(',', $_GET['id']);
-	header('Location: user_delete.php?id='.$ids);
+	header('Location: usergroup_delete.php?id='.$ids);
 	exit;
 }
 else if( (isset($_GET['edit']) || isset($_GET['delete']) || isset($_GET['view'])) && (!isset($_GET['id']))){
@@ -74,7 +74,7 @@ if ($_GET['search']) {
 	$search = '1';
 }
 
-$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator= $group_creator AND $search";
+$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator=$group_creator AND $search";
 //$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users U WHERE $search";
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
@@ -99,7 +99,7 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 */
 $sql = "SELECT distinct(group_name)
           FROM ".TABLE_PREFIX."group_users
-          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+          WHERE $search AND group_creator=$group_creator ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
 

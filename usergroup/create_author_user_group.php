@@ -19,6 +19,10 @@ unset($_SESSION['course_id']);
 $results_per_page = 2;
 $dao = new DAO();
 
+
+if( isset($_POST['group_name']) && (!isset($_POST['id'])) )  {
+	$msg->addError('NO_ITEM_SELECTED');
+}
 //Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
 if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
 	extract($_POST);

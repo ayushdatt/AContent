@@ -19,9 +19,10 @@ global $_base_path;
 
 if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAdmin()))
 {
+	extract($_GET);
 ?>
 	<div class="input-form">
-		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']."?_course_id=$_course_id"; ?>" method="POST">
 		<h3><u>Select Content to Share</u></h3><br>
 		<table><tbody>
 		<?php
@@ -29,43 +30,46 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 		$output = '';
 		$session_user_id = $_SESSION['user_id'];
 		// retrieve data to display
-		$my_courses = $userCoursesDAO->getByUserID($session_user_id); 
-
+		if($this->selected_course)
+			$my_courses = $userCoursesDAO->get($session_user_id, $this->selected_course); 
+		else
+			$my_courses = false;
 		if (!is_array($my_courses)) {
 			$num_of_courses = 0;
 			$output = _AT('none_found');
 		} else {
 			$num_of_courses = count($my_courses);
+			$coursesDao = new CoursesDAO();
+			$courseDetails = $coursesDao->get($my_courses['course_id']);
+			$row = $my_courses;
 			$courseContentDAO = new ContentDAO();
 			$num_spaces=array();//tells the number of spaces to be inserted according to the content parent id
 			$num_spaces[0]=0;
-		    foreach ($my_courses as $row) {
-				// only display the first 200 character of course description
-				if ($row['role'] == TR_USERROLE_AUTHOR) {
-					$output .= "<tr><td><h4>".$row['title']."</h4></td></tr>";
-					$contents=$courseContentDAO->getContentByCourseID($row['course_id']);
-					foreach($contents as $content){
-						$output .= "<tr><td>";
-						for($i=0; $i<$num_spaces[$content['content_parent_id']];$i++){
-							$output .= "<img src='".$_base_path."images/tree/tree_space.gif'>";
-						}
-						$output .= "
-							<img src='".$_base_path."images/tree/tree_end.gif'>
-							<img src='".$_base_path."images/tree/tree_horizontal.gif'>
-						";
-						if($content['content_type']==CONTENT_TYPE_CONTENT){
-							$output .= "<input name=\"share_content_id[]\" value=".$content['content_id']." type=\"checkbox\">".$content['title'];
-						}
-						else if($content['content_type']==CONTENT_TYPE_FOLDER){
-							$output .= "<strong>".$content['title']."</strong>";
-							$num_spaces[$content['content_id']]=$num_spaces[$content['content_parent_id']]+1;
-						}
-						$output .= "</td></tr>";
+			// only display the first 200 character of course description
+			if ($row['role'] == TR_USERROLE_AUTHOR) {
+				$output .= "<tr><td><h4>".$courseDetails['title']."</h4></td></tr>";
+				$contents=$courseContentDAO->getContentByCourseID($courseDetails['course_id']);
+				foreach($contents as $content){
+					$output .= "<tr><td>";
+					for($i=0; $i<$num_spaces[$content['content_parent_id']];$i++){
+						$output .= "<img src='".$_base_path."images/tree/tree_space.gif'>";
 					}
-				} else {
-					echo "in else";
+					$output .= "
+						<img src='".$_base_path."images/tree/tree_end.gif'>
+						<img src='".$_base_path."images/tree/tree_horizontal.gif'>
+					";
+					if($content['content_type']==CONTENT_TYPE_CONTENT){
+						$output .= "<input name=\"share_content_id[]\" value=".$content['content_id']." type=\"checkbox\">".$content['title'];
+					}
+					else if($content['content_type']==CONTENT_TYPE_FOLDER){
+						$output .= "<strong>".$content['title']."</strong>";
+						$num_spaces[$content['content_id']]=$num_spaces[$content['content_parent_id']]+1;
+					}
+					$output .= "</td></tr>";
 				}
-			} // end of foreach; 
+			} else {
+				echo "You Are Not the Author Of this course";
+			}
 		}
 		echo $output;
 		?>

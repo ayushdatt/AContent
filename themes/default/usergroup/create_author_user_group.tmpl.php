@@ -124,12 +124,12 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 <tr>
 	<th scope="col" align="left" width="5%"><input type="checkbox" value="<?php echo _AT('select_all'); ?>" id="all" title="<?php echo _AT('select_all'); ?>" name="selectall" onclick="CheckAll();" /></th>
 
-	<th scope="col" width="15%"><a href="home/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('login_name');      ?></a></th>
-	<th scope="col" width="15%"><a href="home/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=first_name<?php echo $page_string; ?>"><?php echo _AT('first_name'); ?></a></th>
-	<th scope="col" width="10%"><a href="home/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=last_name<?php echo $page_string; ?>"><?php echo _AT('last_name');   ?></a></th>
-	<th scope="col" width="10%"><a href="home/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=user_group<?php echo $page_string; ?>"><?php echo _AT('user_group'); ?></a></th>
-	<th scope="col" width="15%"><a href="home/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=email<?php echo $page_string; ?>"><?php echo _AT('email');           ?></a></th>
-	<th scope="col" width="10%"><a href="home/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=status<?php echo $page_string; ?>"><?php echo _AT('user_status'); ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('login_name');      ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=first_name<?php echo $page_string; ?>"><?php echo _AT('first_name'); ?></a></th>
+	<th scope="col" width="10%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=last_name<?php echo $page_string; ?>"><?php echo _AT('last_name');   ?></a></th>
+	<th scope="col" width="10%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=user_group<?php echo $page_string; ?>"><?php echo _AT('user_group'); ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=email<?php echo $page_string; ?>"><?php echo _AT('email');           ?></a></th>
+	<th scope="col" width="10%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=status<?php echo $page_string; ?>"><?php echo _AT('user_status'); ?></a></th>
 </tr>
 
 </thead>

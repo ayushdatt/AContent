@@ -26,48 +26,47 @@ Utility::authenticate(TR_PRIV_ISAUTHOR);
 
 require(TR_INCLUDE_PATH.'header.inc.php');
 
+extract($_GET);
+extract($_POST);
 
 $dao = new DAO();
 $session_user_id = $_SESSION['user_id'];
-if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name'])) || (isset($_POST['share_user_id'])) ) ){
-	extract($_POST);
-	if( (isset($_POST['share_group_name'])) ){
-	    foreach($share_content_id as $sci) {
-		    foreach($share_group_name as $sgn) {
-				$sql="SELECT * FROM ".TABLE_PREFIX."shared_content_group WHERE content_id=$sci AND group_name='$sgn' AND group_creator=$session_user_id";
-				$result=$dao->execute($sql);
-				if($result){
-					//do nothing duplicate entry
-				}
-				else{
-					$sql="INSERT INTO ".TABLE_PREFIX."shared_content_group (content_id, group_name, group_creator)
-			     				        VALUES (".$sci.",'".$sgn."',".$session_user_id.")";
-					$dao->execute($sql);
-				}
-		    }
+if( (isset($_cid)) && ( (isset($_POST['revoke_group_name'])) || (isset($_POST['revoke_user_id'])) ) ){
+	if( (isset($_POST['revoke_group_name'])) ){
+	    foreach($revoke_group_name as $sgn) {
+			$sql="SELECT * FROM ".TABLE_PREFIX."shared_content_group WHERE content_id=$_cid AND group_name='$sgn' AND group_creator=$session_user_id";
+			$result=$dao->execute($sql);
+			if($result){
+				$sql="DELETE FROM ".TABLE_PREFIX."shared_content_group WHERE content_id=$_cid AND group_name='$sgn' AND group_creator=$session_user_id";
+				$dao->execute($sql);
+			}
 	    }
 	}
-	if( (isset($_POST['share_user_id'])) ){
-	    foreach($share_content_id as $sci) {
-		    foreach($share_user_id as $sui) {
-				$sql="SELECT * FROM ".TABLE_PREFIX."shared_content WHERE content_id=$sci AND user_id=$sui";
-				$result=$dao->execute($sql);
-				if($result){
-					//do nothing duplicate entry
-				}
-				else{		        
-					$sql="INSERT INTO ".TABLE_PREFIX."shared_content (content_id, user_id)
-			     				        VALUES (".$sci.",".$sui.")";
-					$dao->execute($sql);
-				}
-		    }
+	if( (isset($_POST['revoke_user_id'])) ){
+	    foreach($revoke_user_id as $sui) {
+			$sql="SELECT * FROM ".TABLE_PREFIX."shared_content WHERE content_id=$_cid AND user_id=$sui";
+			$result=$dao->execute($sql);
+			if($result){
+				$sql="DELETE FROM ".TABLE_PREFIX."shared_content WHERE content_id=$_cid AND user_id=$sui";
+				$dao->execute($sql);
+			}
 	    }
 	}
-}
-else{
-	//echo "things not set";
 }
 
-$savant->display('sharecontent/share_content.tmpl.php');
+if($_cid){
+	$sql="SELECT user_id FROM ".TABLE_PREFIX."shared_content WHERE content_id=$_content_id AND content_author_id=$session_user_id";
+	$result=$dao->execute($sql);
+	if($result){
+		$savant->assign('shared_users', $result);
+	}
+	$sql="SELECT group_name FROM ".TABLE_PREFIX."shared_content_group WHERE content_id=$_content_id AND group_creator=$session_user_id";
+	$result=$dao->execute($sql);
+	if($result){
+		$savant->assign('shared_groups', $result);
+	}
+}
+$savant->assign('selected_course', $_course_id);
+$savant->display('sharecontent/share_manage.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');
 ?>
