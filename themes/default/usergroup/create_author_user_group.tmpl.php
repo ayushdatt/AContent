@@ -25,29 +25,6 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 		</tr>
 
 		<tr>
-			<th><?php echo _AT('user_status'); ?>:</th>
-			<td>
-			<input type="radio" name="status" value="0" id="s0" <?php if ($_GET['status'] == TR_STATUS_DISABLED) { echo 'checked="checked"'; } ?> /><label for="s0"><?php echo _AT('disabled'); ?></label> 
-			<input type="radio" name="status" value="1" id="s1" <?php if ($_GET['status'] == TR_STATUS_ENABLED) { echo 'checked="checked"'; } ?> /><label for="s1"><?php echo _AT('enabled'); ?></label> 
-			<input type="radio" name="status" value="" id="s" <?php if ($_GET['status'] === '') { echo 'checked="checked"'; } ?> /><label for="s"><?php echo _AT('all'); ?></label>
-			</td>
-		</tr>
-
-		<?php if (is_array($this->all_user_groups)) { ?>
-		<tr>
-			<th><label for="user_group_id"><?php echo _AT('user_group'); ?></label>:</th>
-			<td>
-			<select name="user_group_id" id="user_group_id">
-				<option value="-1">- <?php echo _AT('select'); ?> -</option>
-				<?php foreach ($this->all_user_groups as $user_group) {?>
-				<option value="<?php echo $user_group['user_group_id']; ?>" <?php if($_GET['user_group_id']==$user_group['user_group_id']) { echo 'selected="selected"';}?>><?php echo $user_group['title']; ?></option>
-				<?php } ?>
-			</select>
-			</td>
-		</tr>
-		<?php } ?>
-
-		<tr>
 			<th><label for="search"><?php echo _AT('search'); ?>:</label></th>
 			<td><input type="text" name="search" id="search" size="40" value="<?php echo htmlspecialchars($_GET['search']); ?>" /><br /><small>&middot; <?php echo _AT('login_name').', '._AT('first_name').', '._AT('last_name') .', '._AT('email'); ?></small></td>
 		</tr>
@@ -72,8 +49,6 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	
 <div id="output_div" class="input-form">
 <fieldset class="group_form"><legend class="group_form"><?php echo _AT("users"); ?></legend>
-
-
 <?php print_paginator($this->page, $this->num_results, $this->page_string . htmlspecialchars(SEP) . $this->order .'='. $this->col, $this->results_per_page); ?>
 
 <form name="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -84,17 +59,12 @@ include(TR_INCLUDE_PATH.'header.inc.php');
     </tr>
   </table>  
 <br>
-<input type="hidden" name="status" value="<?php echo $_GET['status']; ?>" />
 <input type="hidden" name="search" value="<?php echo htmlspecialchars($_GET['search']); ?>" />
 <input type="hidden" name="include" value="<?php echo htmlspecialchars($_GET['include']); ?>" />
 
-<table summary="<?php echo _AT('user_table_summary'); ?>" class="data" rules="rows" id="editable_table">
+<table summary="<?php echo _AT('user_table_summary'); ?>" class="data" rules="rows">
 <colgroup>
-	<?php if ($this->col == 'login'): ?>
-		<col />
-		<col class="sort" />
-		<col span="<?php echo 5 + $this->col_counts; ?>" />
-	<?php elseif($this->col == 'public_field'): ?>
+	<?php if($this->col == 'public_field'): ?>
 		<col span="<?php echo 1 + $this->col_counts; ?>" />
 		<col class="sort" />
 		<col span="6" />
@@ -106,36 +76,24 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 		<col span="<?php echo 3 + $this->col_counts; ?>" />
 		<col class="sort" />
 		<col span="4" />
-	<?php elseif($this->col == 'user_group'): ?>
-		<col span="<?php echo 4 + $this->col_counts; ?>" />
-		<col class="sort" />
-		<col span="3" />
 	<?php elseif($this->col == 'email'): ?>
 		<col span="<?php echo 5 + $this->col_counts; ?>" />
 		<col class="sort" />
 		<col span="2" />
-	<?php elseif($this->col == 'status'): ?>
-		<col span="<?php echo 6 + $this->col_counts; ?>" />
-		<col class="sort" />
-		<col />
 	<?php endif; ?>
 </colgroup>
 <thead>
 <tr>
 	<th scope="col" align="left" width="5%"><input type="checkbox" value="<?php echo _AT('select_all'); ?>" id="all" title="<?php echo _AT('select_all'); ?>" name="selectall" onclick="CheckAll();" /></th>
 
-	<th scope="col" width="15%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=login<?php echo $page_string; ?>"><?php echo _AT('login_name');      ?></a></th>
 	<th scope="col" width="15%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=first_name<?php echo $page_string; ?>"><?php echo _AT('first_name'); ?></a></th>
 	<th scope="col" width="10%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=last_name<?php echo $page_string; ?>"><?php echo _AT('last_name');   ?></a></th>
-	<th scope="col" width="10%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=user_group<?php echo $page_string; ?>"><?php echo _AT('user_group'); ?></a></th>
 	<th scope="col" width="15%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=email<?php echo $page_string; ?>"><?php echo _AT('email');           ?></a></th>
-	<th scope="col" width="10%"><a href="usergroup/create_author_user_group.php?<?php echo $this->orders[$this->order]; ?>=status<?php echo $page_string; ?>"><?php echo _AT('user_status'); ?></a></th>
 </tr>
 
 </thead>
 <?php if ($this->num_results > 0): ?>
 	<tfoot>
-            
 	<tr>
 		<td>
                     <input type="submit" name="submitusergroup" value="<?php echo _AT('create_group'); ?>" /> 
@@ -149,12 +107,9 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 			    id="rm<?php echo $row['user_id']; ?>">
 				<td><input type="checkbox" name="id[]" value="<?php echo $row['user_id']; ?>" id="m<?php echo $row['user_id']; ?>" 
 				           onmouseup="this.checked=!this.checked" onkeyup="this.checked=!this.checked" /></td>
-				<td><?php echo $row['login']; ?></td>
 				<td><?php echo $row['first_name']; ?></td>
 				<td><?php echo $row['last_name']; ?></td>
-				<td><?php echo $row['user_group']; ?></td>
 				<td><?php echo $row['email']; ?></td>
-				<td><?php echo get_status_by_code($row['status']);?></td>
 			</tr>
 		<?php }} ?>
 	</tbody>
@@ -164,6 +119,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	</tr>
 <?php endif; ?>
 </table><br />
+<small class="data-table-tip"><?php echo _AT('inline_editor_tip'); ?></small>
 
 
 </form>
@@ -189,6 +145,25 @@ function togglerowhighlight(obj, boxid) {
 		obj.className = '';
 	}
 }
+
+jQuery(document).ready(function () {
+	var tableEdit = fluid.inlineEdits("#editable_table", {
+		selectors : {
+			text : ".inlineEdits",
+			editables : "td:has(span.inlineEdits)"
+		},
+		defaultViewText: "",
+		useTooltip: true,
+		listeners: {
+			afterFinishEdit : function (newValue, oldValue, editNode, viewNode) {
+				if (newValue != oldValue)
+					rtn = jQuery.post("<?php echo TR_BASE_HREF; ?>usergroup/index_inline_editor_submit.php", { "field":viewNode.id, "value":newValue }, 
+				          function(data) { handleAjaxResponse(data, viewNode, oldValue); }, "json");
+			}
+		}
+	});
+});
+
 //-->
 </script>
 <?php require(TR_INCLUDE_PATH.'footer.inc.php'); ?>
