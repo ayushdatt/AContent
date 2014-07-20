@@ -13,6 +13,7 @@
 define('TR_INCLUDE_PATH', '../include/');
 include(TR_INCLUDE_PATH.'vitals.inc.php');
 include(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/SharedContentDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants

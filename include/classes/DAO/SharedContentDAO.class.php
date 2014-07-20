@@ -21,7 +21,7 @@ if (!defined('TR_INCLUDE_PATH')) exit;
 
 require_once(TR_INCLUDE_PATH. 'classes/DAO/DAO.class.php');
 
-class GroupsUsersDAO extends DAO {
+class SharedContentDAO extends DAO {
 
 	/**
 	 * Create a new user group
@@ -140,13 +140,13 @@ class GroupsUsersDAO extends DAO {
 	public function UpdateField($userGroupID, $fieldName, $fieldValue)
 	{
 		global $addslashes;
-
+                $group_creator=$_SESSION['user_id'];
 		// check if the required fields are filled
 		if ($fieldName == 'title' && $fieldValue == '') return array(_AT('TR_ERROR_EMPTY_FIELD'));
 		
-		$sql = "UPDATE ".TABLE_PREFIX."group_users 
+		$sql = "UPDATE ".TABLE_PREFIX."shared_content_group 
 		           SET ".$addslashes($fieldName)."='".$addslashes($fieldValue)."'
-		         WHERE group_name = ".$userGroupID;
+		         WHERE group_name = ".$userGroupID." AND group_creator=".$group_creator;
 		
 		return $this->execute($sql);
 	}

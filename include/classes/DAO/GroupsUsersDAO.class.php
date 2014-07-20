@@ -140,13 +140,13 @@ class GroupsUsersDAO extends DAO {
 	public function UpdateField($userGroupID, $fieldName, $fieldValue)
 	{
 		global $addslashes;
-
+                $group_creator=$_SESSION['user_id'];
 		// check if the required fields are filled
 		if ($fieldName == 'title' && $fieldValue == '') return array(_AT('TR_ERROR_EMPTY_FIELD'));
 		
 		$sql = "UPDATE ".TABLE_PREFIX."group_users 
 		           SET ".$addslashes($fieldName)."='".$addslashes($fieldValue)."'
-		         WHERE group_name = ".$userGroupID;
+		         WHERE group_name = ".$userGroupID." AND group_creator=".$group_creator;
 		
 		return $this->execute($sql);
 	}
