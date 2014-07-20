@@ -19,42 +19,9 @@ unset($_SESSION['course_id']);
 $results_per_page = 50;
 $dao = new DAO();
 
-
-if( isset($_POST['group_name']) && (!isset($_POST['id'])) )  {
-	$msg->addError('NO_ITEM_SELECTED');
-}
-//Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
-if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
-	extract($_POST);
-	$group_creator=$_SESSION['user_id'];
-        
-        $sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator";
-        $result=$dao->execute($sql);
-        if( $result <> 0)
-        {
-            $msg->addError('USER_GROUP_EXISTS');
-        }
-        else
-        {
-            for($i=0;$i<count($_POST['id']);$i++){
-                    $sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator AND user_id=$id[$i]";
-                    $result=$dao->execute($sql);
-                    if($result){
-                            //do nothing duplicate entry
-                    }
-                    else{
-                            $sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
-                                                    VALUES ('".$group_name."',".$group_creator.",".$id[$i].")";
-                            $dao->execute($sql);
-                    }
-            }
-        }
-}
-
 // page initialize
 if ($_GET['reset_filter']) {
 	unset($_GET);
-        unset($_POST);
 }
 
 $page_string = '';
@@ -130,6 +97,23 @@ $sql = "SELECT user_id, first_name, last_name, email
           WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
+
+if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
+	$ids = '';
+	while ($row = mysql_fetch_assoc($result)) {
+		$ids .= $row['user_id'].','; 
+	}
+	$ids = substr($ids,0,-1);
+	$status = intval($_GET['change_status']);
+
+	if ($status==-1) {
+		header('Location: user_delete.php?id='.$ids);
+		exit;
+	} else {
+		header('Location: user_status.php?ids='.$ids.'&status='.$status);
+		exit;
+	}
+}
 
 $userGroupsDAO = new UserGroupsDAO();
 

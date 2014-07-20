@@ -42,6 +42,7 @@ define('TR_PRIV_FILE_MANAGER', 9);
 define('TR_PRIV_PROFILE', 10);
 define('TR_PRIV_USER_GROUPS', 11);
 define('TR_PRIV_SHARE_CONTENT', 12);
+define('TR_PRIV_VIEW_SHARED_CONTENT', 13);
 
 /* constants used for menu item generation. Used in class Menu (include/classes/Menu.class.php) */
 define('TR_NAV_PUBLIC', 'TR_NAV_PUBLIC');  // public menus, when no user login
@@ -299,6 +300,10 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
         $_pages['usergroup/usergroup_delete.php']['title_var'] = 'delete_user';
 	$_pages['usergroup/usergroup_delete.php']['parent']    = 'usergroup/index.php';
 
+        $_pages['usergrpup/view_user_group.php']['title_var'] = 'view_user_group';
+	$_pages['usergroup/view_user_group.php']['parent']    = 'usergroup/index.php';
+	$_pages['usergroup/view_user_group.php']['guide']    = 'TR_HELP_CREATE_EDIT_USER_GROUP';
+	
         /*Share Content
 	$_pages['usergroup/share_content.php']['title'] = 'Share Content';
 	$_pages['usergroup/share_content.php']['title_var'] = 'share_content';
@@ -394,6 +399,14 @@ if (array_key_exists(TR_PRIV_SHARE_CONTENT, $privs) && Utility::authenticate($pr
         $_pages['sharecontent/share_manage.php']['guide']    = 'TR_HELP_MANAGE_SHARE';
 }
 
+
+// share content
+if (array_key_exists(TR_PRIV_VIEW_SHARED_CONTENT, $privs) && Utility::authenticate($privs[TR_PRIV_VIEW_SHARED_CONTENT], false))
+{
+	$_pages['viewshared/index.php']['title_var'] = 'view_shared';
+	$_pages['viewshared/index.php']['parent']    = TR_NAV_TOP;
+	$_pages['viewshared/index.php']['guide']     = 'TR_HELP_SHARE_CONTENT';
+}
 // manage tests
 if (array_key_exists(TR_PRIV_MANAGE_TESTS, $privs) && Utility::authenticate($privs[TR_PRIV_MANAGE_TESTS], false))
 {
