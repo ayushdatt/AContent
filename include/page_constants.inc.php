@@ -304,6 +304,9 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
 	$_pages['usergroup/view_user_group.php']['parent']    = 'usergroup/index.php';
 	$_pages['usergroup/view_user_group.php']['guide']    = 'TR_HELP_CREATE_EDIT_USER_GROUP';
 	
+        $_pages['usergroup/edit_user_group.php']['title_var'] = 'edit_user_group';
+	$_pages['usergroup/edit_user_group.php']['parent']    = 'usergroup/index.php';
+	$_pages['usergroup/edit_user_group.php']['guide']    = 'TR_HELP_CREATE_EDIT_USER_GROUP';
         /*Share Content
 	$_pages['usergroup/share_content.php']['title'] = 'Share Content';
 	$_pages['usergroup/share_content.php']['title_var'] = 'share_content';

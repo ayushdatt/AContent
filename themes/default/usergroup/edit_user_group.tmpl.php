@@ -25,7 +25,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 		</tr>
                 
                 <tr>
-			<td colspan="2"><h2><?php echo _AT('results_found', $this->num_results); ?></h2></td>
+			<td colspan="2"><h2><?php echo _AT('results_found', $this->num_results_selected); ?></h2></td>
 		</tr>
 
 		<tr>
@@ -62,7 +62,11 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 
 <table summary="<?php echo _AT('user_table_summary'); ?>" class="data" rules="rows">
 <colgroup>
-	<?php if($this->col == 'first_name'): ?>
+        <?php if($this->col == 'public_field'): ?>
+		<col span="<?php echo 1 + $this->col_counts; ?>" />
+		<col class="sort" />
+		<col span="6" />
+	<?php elseif($this->col == 'first_name'): ?>
 		<col span="<?php echo 2 + $this->col_counts; ?>" />
 		<col class="sort" />
 		<col span="5" />
@@ -78,15 +82,50 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 </colgroup>
 <thead>
 <tr>
-	<th scope="col" width="15%"><a href="usergroup/view_user_group.php?<?php echo $this->orders[$this->order]; ?>=first_name<?php echo $page_string; ?>"><?php echo _AT('first_name'); ?></a></th>
-	<th scope="col" width="10%"><a href="usergroup/view_user_group.php?<?php echo $this->orders[$this->order]; ?>=last_name<?php echo $page_string; ?>"><?php echo _AT('last_name');   ?></a></th>
-	<th scope="col" width="15%"><a href="usergroup/view_user_group.php?<?php echo $this->orders[$this->order]; ?>=email<?php echo $page_string; ?>"><?php echo _AT('email');           ?></a></th>
+        <th scope="col" align="left" width="5%"><input type="checkbox" value="<?php echo _AT('select_all'); ?>" id="all" title="<?php echo _AT('select_all'); ?>" name="selectall" onclick="CheckAll();" /></th>
+	<th scope="col" width="15%"><a href="usergroup/edit_user_group.php?<?php echo $this->orders[$this->order]; ?>=first_name<?php echo $page_string; ?>"><?php echo _AT('first_name'); ?></a></th>
+	<th scope="col" width="10%"><a href="usergroup/edit_user_group.php?<?php echo $this->orders[$this->order]; ?>=last_name<?php echo $page_string; ?>"><?php echo _AT('last_name');   ?></a></th>
+	<th scope="col" width="15%"><a href="usergroup/edit_user_group.php?<?php echo $this->orders[$this->order]; ?>=email<?php echo $page_string; ?>"><?php echo _AT('email');           ?></a></th>
 </tr>
 
 </thead>
 <?php if ($this->num_results > 0): ?>
+<tfoot>
+    <tr>
+	<td>
+            <input type="submit" name="modify_group" value="<?php echo _AT('modify_group'); ?>" /> 
+	</td>
+    </tr>
+</tfoot>
+
 	<tbody>
-		<?php if (is_array($this->user_rows)){ foreach ($this->user_rows as $row) {?>
+		<?php if (is_array($this->user_rows) && (is_array($this->user_rows_selected)))
+                    { foreach ($this->user_rows as $row) 
+                        {
+                        $value=0;
+                        foreach ($this->user_rows_selected as $row_selected) 
+                            {
+                            if($row_selected['user_id']==$row['user_id'])
+                                {
+                                $value=1;
+                                break;
+                                }
+                            }
+                        ?>
+                        
+                        <tr onmousedown="document.form['m<?php echo $row['user_id']; ?>'].checked = !document.form['m<?php echo $row['user_id']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['user_id']; ?>');" 
+			    onkeydown="document.form['m<?php echo $row['user_id']; ?>'].checked = !document.form['m<?php echo $row['user_id']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['user_id']; ?>');"
+			    id="rm<?php echo $row['user_id']; ?>">
+			<td>
+                            <?php if($value==1){ ?>
+                            <input type="checkbox" name="id[]" value="<?php echo $row['user_id']; ?>" id="m<?php echo $row['user_id']; ?>" 
+				           onmouseup="this.checked=!this.checked" onkeyup="this.checked=!this.checked" checked/>
+                            <?php }else { ?>
+                            <input type="checkbox" name="id[]" value="<?php echo $row['user_id']; ?>" id="m<?php echo $row['user_id']; ?>" 
+				           onmouseup="this.checked=!this.checked" onkeyup="this.checked=!this.checked"/>
+                            <?php    
+                            } ?>
+                        </td>
 			<td><?php echo $row['first_name']; ?></td>
 			<td><?php echo $row['last_name']; ?></td>
 			<td><?php echo $row['email']; ?></td>
@@ -99,10 +138,32 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	</tr>
 <?php endif; ?>
 </table><br />
-
+<small class="data-table-tip"><?php echo _AT('inline_editor_tip'); ?></small>
 
 </form>
 </fieldset>
 </div>
+<script language="JavaScript" type="text/javascript">
+//<!--
+function CheckAll() {
+	for (var i=0;i<document.form.elements.length;i++)	{
+		var e = document.form.elements[i];
+		if ((e.name == 'id[]') && (e.type=='checkbox')) {
+			e.checked = document.form.selectall.checked;
+			togglerowhighlight(document.getElementById("r" + e.id), e.id);
+		}
+	}
+}
+
+function togglerowhighlight(obj, boxid) {
+	if (document.getElementById(boxid).checked) {
+		obj.className = 'selected';
+	} else {
+		obj.className = '';
+	}
+}
+
+//-->
+</script>
 
 <?php require(TR_INCLUDE_PATH.'footer.inc.php'); ?>

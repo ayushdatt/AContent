@@ -24,7 +24,7 @@ if ( (isset($_GET['edit']) || isset($_GET['view'])) && (isset($_GET['id']) && co
 	$msg->addError('SELECT_ONE_ITEM');
 }
 else if (isset($_GET['edit'], $_GET['id'])) {
-	header('Location: view_user_group.php?id='.$_GET['id'][0]);
+	header('Location: edit_user_group.php?id='.$_GET['id'][0]);
 	exit;
 } else if (isset($_GET['view'], $_GET['id'])) {
 	header('Location: view_user_group.php?id='.$_GET['id'][0]);

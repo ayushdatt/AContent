@@ -36,6 +36,33 @@ else
 }
 $group_creator=$_SESSION['user_id'];
 
+
+//Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
+if( (isset($_POST['modify_group'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
+	extract($_POST);
+	$group_creator=$_SESSION['user_id'];
+        
+        $sql="DELETE FROM ".TABLE_PREFIX."group_users WHERE group_name=$group_name AND group_creator=$group_creator";
+        $result=$dao->execute($sql);
+        
+            for($i=0;$i<count($_POST['id']);$i++){
+                    $sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name=$group_name AND group_creator=$group_creator AND user_id=$id[$i]";
+                    $result=$dao->execute($sql);
+                    if($result){
+                            //do nothing duplicate entry
+                    }
+                    else{
+                            $sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
+                                                    VALUES (".$group_name.",".$group_creator.",".$id[$i].")";
+                            $dao->execute($sql);
+                    }
+            }
+        
+}
+
+
+
+
 $page_string = '';
 $orders = array('asc' => 'desc', 'desc' => 'asc');
 $cols   = array('first_name' => 1, 'last_name' => 1,'email' => 1);
@@ -78,7 +105,7 @@ if ($_GET['search']) {
 		$term = str_replace(array('%','_'), array('\%', '\_'), $term);
 		if ($term) {
 			$term = '%'.$term.'%';
-			$sql .= "((U.first_name LIKE '$term') OR (U.last_name LIKE '$term') OR (U.email LIKE '$term')) $predicate";
+			$sql .= "((first_name LIKE '$term') OR (last_name LIKE '$term') OR (email LIKE '$term')) $predicate";
 		}
 	}
 	$sql = '('.substr($sql, 0, -strlen($predicate)).')';
@@ -86,8 +113,15 @@ if ($_GET['search']) {
 } else {
 	$search = '1';
 }
+
 $sql	= "SELECT COUNT(GU.user_id) AS cnt FROM ".TABLE_PREFIX."users U , ".TABLE_PREFIX."group_users GU"
         . "  WHERE U.user_id=GU.user_id AND $search AND GU.group_creator=$group_creator AND GU.group_name=$group_name";
+
+$rows = $dao->execute($sql);
+$num_results_selected = $rows[0]['cnt'];
+
+
+$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users WHERE $search";
 
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
@@ -109,7 +143,14 @@ $sql = "SELECT U.user_id, U.first_name, U.last_name, U.email
           FROM ".TABLE_PREFIX."users U,".TABLE_PREFIX."group_users GU"
           . " WHERE U.user_id=GU.user_id AND GU.group_creator=$group_creator AND GU.group_name=$group_name AND $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
+$user_rows_selected = $dao->execute($sql);
+
+$sql = "SELECT user_id, first_name, last_name, email
+          FROM ".TABLE_PREFIX."users
+          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+
 $user_rows = $dao->execute($sql);
+
 
 if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 	$ids = '';
@@ -131,9 +172,11 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 $userGroupsDAO = new UserGroupsDAO();
 
 $savant->assign('user_rows', $user_rows);
+$savant->assign('user_rows_selected', $user_rows_selected);
 $savant->assign('all_user_groups', $userGroupsDAO->getAll());
 $savant->assign('results_per_page', $results_per_page);
 $savant->assign('num_results', $num_results);
+$savant->assign('num_results_selected', $num_results_selected);
 $savant->assign('checked_include_all', $checked_include_all);
 $savant->assign('col_counts', $col_counts);
 $savant->assign('page',$page);
@@ -143,6 +186,6 @@ $savant->assign('order', $order);
 $savant->assign('col', $col);
 $savant->assign('group_name', $group_name);
 
-$savant->display('usergroup/view_user_group.tmpl.php');
+$savant->display('usergroup/edit_user_group.tmpl.php');
 
 ?>

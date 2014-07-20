@@ -24,10 +24,10 @@ if ( (isset($_GET['edit']) || isset($_GET['view'])) && (isset($_GET['id']) && co
 	$msg->addError('SELECT_ONE_ITEM');
 }
 else if (isset($_GET['edit'], $_GET['id'])) {
-	header('Location: user_create_edit.php?id='.$_GET['id'][0]);
+	header('Location: view_user_group.php?id='.$_GET['id'][0]);
 	exit;
 } else if (isset($_GET['view'], $_GET['id'])) {
-	header('Location: usergroup_view.php?id='.$_GET['id'][0]);
+	header('Location: view_user_group.php?id='.$_GET['id'][0]);
 	exit;
 } else if ( isset($_GET['delete'], $_GET['id'])) {
 	$ids = implode(',', $_GET['id']);
@@ -118,6 +118,6 @@ $savant->assign('orders', $orders);
 $savant->assign('order', $order);
 $savant->assign('col', $col);
 
-$savant->display('usergroup/index.tmpl.php');
+$savant->display('usergroup/existing_usergroups.tmpl.php');
 
 ?>
