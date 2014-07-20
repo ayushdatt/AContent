@@ -34,13 +34,13 @@ if ( isset($_current_user) )
 			$output .= "<tr><td>";
 			$currCourse = $courseContentDAO->get($row['content_id']);
 			$output .= "<a href='".TR_BASE_HREF."home/course/content.php?_cid=".$currCourse['content_id']."'>".$currCourse['title']."</a>";
+			$output .= "<input type='button' value='Edit' onclick=\"document.location.href='".TR_BASE_HREF."home/editor/edit_content.php?_cid=".$currCourse['content_id']."';\"/>";
 			$output .= " by ".$usersDao->getUserName($row['content_author_id']);
 			$output .= "</td></tr>";
 		}
 		echo $output;
 		?>
 		</tbody></table>
-		<input type="submit" value="Share Content">
 		</form>
 	</div>
 
