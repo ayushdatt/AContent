@@ -501,6 +501,16 @@ CREATE TABLE `shared_content_group` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 # --------------------------------------------------------
+# Table structure for table `shared_content_group`
+
+CREATE TABLE `shared_content_locking` (
+  `content_id` int(8) NOT NULL,  
+  `user_id` varchar(255) NOT NULL DEFAULT '',
+  `last_modified` datetime NOT NULL,
+  PRIMARY KEY  (`content_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+# --------------------------------------------------------
 # Table structure for table `user_group_privilege`
 # since 0.1
 
