@@ -56,8 +56,7 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 					//do nothing duplicate entry
 				}
 				else{		        
-					$sql="INSERT INTO ".TABLE_PREFIX."shared_content (content_id, user_id)
-			     				        VALUES (".$sci.",".$sui.")";
+					$sql="INSERT INTO ".TABLE_PREFIX."shared_content (content_id, user_id, content_author_id) VALUES ($sci, $sui, $session_user_id)";
 					$dao->execute($sql);
 				}
 		    }
@@ -67,7 +66,8 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 else{
 	//echo "things not set";
 }
-
+extract($_GET);
+$savant->assign('selected_course', $_course_id);
 $savant->display('sharecontent/share_content.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');
 ?>

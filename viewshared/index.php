@@ -18,57 +18,26 @@ define('TR_INCLUDE_PATH', '../include/');
 require(TR_INCLUDE_PATH.'vitals.inc.php');
 require_once(TR_INCLUDE_PATH.'classes/Utility.class.php');
 include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/ContentDAO.class.php');
 $dao = new DAO();
-// make sure the user has author privilege
-Utility::authenticate(TR_PRIV_ISAUTHOR);
-
-// get a list of authors if admin is creating a lesson	
 
 require(TR_INCLUDE_PATH.'header.inc.php');
 
-
 $dao = new DAO();
 $session_user_id = $_SESSION['user_id'];
-if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name'])) || (isset($_POST['share_user_id'])) ) ){
-	extract($_POST);
-	if( (isset($_POST['share_group_name'])) ){
-	    foreach($share_content_id as $sci) {
-		    foreach($share_group_name as $sgn) {
-				$sql="SELECT * FROM ".TABLE_PREFIX."shared_content_group WHERE content_id=$sci AND group_name='$sgn' AND group_creator=$session_user_id";
-				$result=$dao->execute($sql);
-				if($result){
-					//do nothing duplicate entry
-				}
-				else{
-					$sql="INSERT INTO ".TABLE_PREFIX."shared_content_group (content_id, group_name, group_creator)
-			     				        VALUES (".$sci.",'".$sgn."',".$session_user_id.")";
-					$dao->execute($sql);
-				}
-		    }
-	    }
-	}
-	if( (isset($_POST['share_user_id'])) ){
-	    foreach($share_content_id as $sci) {
-		    foreach($share_user_id as $sui) {
-				$sql="SELECT * FROM ".TABLE_PREFIX."shared_content WHERE content_id=$sci AND user_id=$sui";
-				$result=$dao->execute($sql);
-				if($result){
-					//do nothing duplicate entry
-				}
-				else{		        
-					$sql="INSERT INTO ".TABLE_PREFIX."shared_content (content_id, user_id, content_author_id)
- +			     				        VALUES ($sci, $sui, $session_user_id)";
-					$dao->execute($sql);
-				}
-		    }
-	    }
-	}
+$current_share_content = array();
+
+if( isset($session_user_id) ){
+	$sql="SELECT DISTINCT(content_id), gu.group_creator AS content_author_id FROM ".TABLE_PREFIX."shared_content_group scg, ".TABLE_PREFIX."group_users gu WHERE scg.group_name=gu.group_name AND scg.group_creator=gu.group_creator AND gu.user_id=$session_user_id ORDER BY content_id";
+	$current_share_content_group=$dao->execute($sql);
+	//find all the content shared with the current user
+	$sql="SELECT DISTINCT(content_id), content_author_id FROM ".TABLE_PREFIX."shared_content WHERE user_id=$session_user_id ORDER BY content_id";
+	$current_share_content_group=$dao->execute($sql);
+	if( is_array($current_share_content_group) )
+		$current_share_content=array_merge($current_share_content, $current_share_content_group);
 }
-else{
-	//echo "things not set";
-}
-extract($_GET);
-$savant->assign('selected_course', $_course_id);
-$savant->display('sharecontent/share_content.tmpl.php');
+
+$savant->assign('current_share_content', $current_share_content);
+$savant->display('sharecontent/current_share_content.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');
 ?>
