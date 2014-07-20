@@ -300,7 +300,7 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
         $_pages['usergroup/usergroup_delete.php']['title_var'] = 'delete_user';
 	$_pages['usergroup/usergroup_delete.php']['parent']    = 'usergroup/index.php';
 
-        $_pages['usergrpup/view_user_group.php']['title_var'] = 'view_user_group';
+        $_pages['usergroup/view_user_group.php']['title_var'] = 'view_user_group';
 	$_pages['usergroup/view_user_group.php']['parent']    = 'usergroup/index.php';
 	$_pages['usergroup/view_user_group.php']['guide']    = 'TR_HELP_CREATE_EDIT_USER_GROUP';
 	

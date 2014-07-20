@@ -24,6 +24,9 @@ if ($_GET['reset_filter']) {
 	unset($_GET);
 }
 
+$group_name=$_GET['id'];
+$group_creator=$_SESSION['user_id'];
+
 $page_string = '';
 $orders = array('asc' => 'desc', 'desc' => 'asc');
 $cols   = array('first_name' => 1, 'last_name' => 1,'email' => 1);
@@ -128,7 +131,8 @@ $savant->assign('page_string', $page_string);
 $savant->assign('orders', $orders);
 $savant->assign('order', $order);
 $savant->assign('col', $col);
+$savant->assign('group_name', $group_name);
 
-$savant->display('usergroup/create_author_user_group.tmpl.php');
+$savant->display('usergroup/view_user_group.tmpl.php');
 
 ?>

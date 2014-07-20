@@ -21,6 +21,10 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 	<fieldset class="group_form"><legend class="group_form"><?php echo _AT("filter"); ?></legend>
 		<table class="filter">
 		<tr>
+			<td colspan="2"><h2><?php echo _AT('present_group_name', $this->group_name); ?></h2></td>
+		</tr>
+                
+                <tr>
 			<td colspan="2"><h2><?php echo _AT('results_found', $this->num_results); ?></h2></td>
 		</tr>
 

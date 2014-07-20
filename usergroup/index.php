@@ -27,7 +27,7 @@ else if (isset($_GET['edit'], $_GET['id'])) {
 	header('Location: view_user_group.php?id='.$_GET['id'][0]);
 	exit;
 } else if (isset($_GET['view'], $_GET['id'])) {
-	header('Location: usergroup_view.php?id='.$_GET['id'][0]);
+	header('Location: view_user_group.php?id='.$_GET['id'][0]);
 	exit;
 } else if ( isset($_GET['delete'], $_GET['id'])) {
 	$ids = implode(',', $_GET['id']);
