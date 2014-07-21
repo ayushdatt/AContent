@@ -68,6 +68,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_msgs', 'TR_ERROR_FILE_TOO_BIG', 'The file size exceeds the limit of <strong>%s </strong>. Contact your Transformable Administrator to have this limit increased.', '2010-04-06 13:21:58', ''),
 ('en', '_msgs', 'TR_ERROR_FIRST_LAST_NAME_UNIQUE', 'First, second, and last names combination must be unique.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_FOLDER_NOT_CREATED', 'The folder \" %s \" could not be created.', '2010-04-01 15:23:52', ''),
+('en', '_msgs', 'TR_ERROR_GROUP_NAME_MANDATORY', 'Group Name is a Mandatory Field', '2014-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_ID_ZERO', 'Content ID was zero, or was missing.', '2010-05-20 12:08:10', ''),
 ('en', '_msgs', 'TR_ERROR_IMPORTDIR_IMS_NOTVALID', 'Import failed. Is not a ZIP file.', '2011-10-28 16:08:54', ''),
 ('en', '_msgs', 'TR_ERROR_IMPORT_CARTRIDGE_FAILED', 'Import failed. Does not appear to be a valid content package or common cartridge:\r\n\r\n%s', '2010-06-09 12:43:16', ''),

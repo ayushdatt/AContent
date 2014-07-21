@@ -18,13 +18,18 @@ unset($_SESSION['course_id']);
 // initialize constants
 $results_per_page = 50;
 $dao = new DAO();
-
+$group_creator=$_SESSION['user_id'];
 
 if( isset($_POST['group_name']) && (!isset($_POST['id'])) )  {
 	$msg->addError('NO_ITEM_SELECTED');
 }
+
+if( isset($_POST['group_name']) && $_POST['group_name']=='')
+{
+    $msg->addError('GROUP_NAME_MANDATORY');
+}
 //Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
-if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
+else if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
 	extract($_POST);
 	$group_creator=$_SESSION['user_id'];
         
@@ -48,6 +53,9 @@ if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['
                             $dao->execute($sql);
                     }
             }
+        $msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
+	header('Location: index.php');
+	exit;
         }
 }
 
@@ -107,7 +115,7 @@ if ($_GET['search']) {
 } else {
 	$search = '1';
 }
-$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users WHERE $search";
+$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users WHERE $search AND user_id!=$group_creator";
 
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
@@ -127,7 +135,7 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 
 $sql = "SELECT user_id, first_name, last_name, email
           FROM ".TABLE_PREFIX."users
-          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+          WHERE $search AND user_id!=$group_creator ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
 

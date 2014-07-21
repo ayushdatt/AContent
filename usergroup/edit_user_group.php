@@ -57,6 +57,9 @@ if( (isset($_POST['modify_group'])) && (isset($_POST['id'])) && (isset($_SESSION
                             $dao->execute($sql);
                     }
             }
+        $msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
+	header('Location: index.php');
+	exit;
         
 }
 
@@ -121,7 +124,7 @@ $rows = $dao->execute($sql);
 $num_results_selected = $rows[0]['cnt'];
 
 
-$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users WHERE $search";
+$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users WHERE $search AND user_id!=$group_creator";
 
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
@@ -147,7 +150,7 @@ $user_rows_selected = $dao->execute($sql);
 
 $sql = "SELECT user_id, first_name, last_name, email
           FROM ".TABLE_PREFIX."users
-          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+          WHERE $search AND user_id!=$group_creator ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
 

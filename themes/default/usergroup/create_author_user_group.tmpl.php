@@ -54,8 +54,11 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 <form name="form" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
   <table class="filter">  
     <tr>
-			<th><label for="group_name"><?php echo _AT('group_name'); ?>:</label></th>
-			<td><input type="text" name="group_name" id="group_name" size="40" value="<?php echo htmlspecialchars($_GET['group_name']); ?>" /></td>
+			<td colspan="2" align="left"><?php echo _AT('required_field_text') ;?></td>
+    </tr>
+    <tr>
+			<th align="left"><span class="required" title="<?php echo _AT('required_field'); ?>">*</span><label for="group_name"><?php echo _AT('group_name'); ?>:</label></th>
+			<td align="left"><input type="text" name="group_name" id="group_name" size="40" value="<?php echo htmlspecialchars($_GET['group_name']); ?>" /></td>
     </tr>
   </table>  
 <br>
