@@ -14,6 +14,7 @@ if (!defined('TR_INCLUDE_PATH')) exit;
 
 require_once(TR_INCLUDE_PATH. 'classes/DAO/DAO.class.php');
 require_once(TR_INCLUDE_PATH. 'classes/DAO/ContentDAO.class.php');
+require_once(TR_INCLUDE_PATH. 'classes/DAO/SharedContentDAO.class.php');
 require_once(TR_INCLUDE_PATH. 'classes/Utility.class.php');
 
 class ContentManager
@@ -266,7 +267,8 @@ class ContentManager
 	                     $head, $use_customized_head, $test_message) {
 	    global $_current_user;
 	    
-		if (!isset($_current_user) || !$_current_user->isAuthor($this->course_id) && !$_current_user->isAdmin()) {
+	    $sharedContentDAO = new SharedContentDAO();
+		if (!isset($_current_user) || ( !$_current_user->isAuthor($this->course_id) && !$sharedContentDAO->isShared($_current_user->userID, $_GET['_cid']) ) && !$_current_user->isAdmin()) {
 			return FALSE;
 		}
 

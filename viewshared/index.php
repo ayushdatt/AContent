@@ -32,9 +32,14 @@ if( isset($session_user_id) ){
 	$current_share_content_group=$dao->execute($sql);
 	//find all the content shared with the current user
 	$sql="SELECT DISTINCT(content_id), content_author_id FROM ".TABLE_PREFIX."shared_content WHERE user_id=$session_user_id ORDER BY content_id";
-	$current_share_content_group=$dao->execute($sql);
-	if( is_array($current_share_content_group) )
-		$current_share_content=array_merge($current_share_content, $current_share_content_group);
+	$current_share_content=$dao->execute($sql);
+	if(is_array($current_share_content)){
+		if( is_array($current_share_content_group) )
+			$current_share_content=array_merge($current_share_content, $current_share_content_group);
+	}
+	else{
+		$current_share_content = $current_share_content_group;
+	}
 }
 
 $savant->assign('current_share_content', $current_share_content);

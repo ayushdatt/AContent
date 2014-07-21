@@ -193,5 +193,22 @@ class SharedContentDAO extends DAO {
 			return $rows[0];
 		}
 	}
+
+	public function isShared($user_id, $cid)
+		{
+		$user_id = intval($user_id);
+		$cid = intval($cid);
+		$sql="SELECT content_id FROM ".TABLE_PREFIX."shared_content_group scg, ".TABLE_PREFIX."group_users gu WHERE scg.group_name=gu.group_name AND scg.group_creator=gu.group_creator AND gu.user_id=$user_id AND scg.content_id=$cid";
+		$current_share_content_group=$this->execute($sql);
+		//find all the content shared with the current user
+		$sql="SELECT content_id FROM ".TABLE_PREFIX."shared_content WHERE user_id=$user_id AND content_id=$cid";
+		$current_share_content=$this->execute($sql);
+		if($current_share_content || $current_share_content_group){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
 ?>
