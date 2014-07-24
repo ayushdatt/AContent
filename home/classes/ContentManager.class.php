@@ -268,12 +268,19 @@ class ContentManager
 	    global $_current_user;
 	    
 	    $sharedContentDAO = new SharedContentDAO();
-		if (!isset($_current_user) || ( !$_current_user->isAuthor($this->course_id) && !$sharedContentDAO->isShared($_current_user->userID, $_GET['_cid']) ) && !$_current_user->isAdmin()) {
-			return FALSE;
-		}
+            $sharedContentLockingDAO = new SharedContentLockingDAO();
 
-		$this->contentDAO->Update($content_id, $title, $text, $keywords, $formatting, $head, $use_customized_head,
-		                          $test_message);
+            if($sharedContentLockingDAO->canEdit($_GET['_cid'], $_SESSION['user_id'])==false){
+                //$msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
+		//header('Location: '.basename($_SERVER['PHP_SELF']).'?_cid='.$cid.SEP.'close='.$addslashes($_POST['save_n_close']).SEP.'tab='.$addslashes($_POST['current_tab']).SEP.'displayhead='.$addslashes($_POST['displayhead']).SEP.'alternatives='.$addslashes($_POST['alternatives']));
+                header('Location: '.TR_BASE_HREF.'viewshared/index.php');
+            }
+            
+            if (!isset($_current_user) || ( !$_current_user->isAuthor($this->course_id) && !$sharedContentDAO->isShared($_current_user->userID, $_GET['_cid']) ) && !$_current_user->isAdmin()) {
+			return FALSE;
+            }
+
+            $this->contentDAO->Update($content_id, $title, $text, $keywords, $formatting, $head, $use_customized_head,$test_message);
 	}
 
 	function moveContent($content_id, $new_content_parent_id, $new_content_ordering) {

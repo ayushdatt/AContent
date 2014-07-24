@@ -39,7 +39,7 @@ class SharedContentLockingDAO extends DAO {
 		$sql = "SELECT * FROM ".TABLE_PREFIX."shared_content_locking WHERE content_id=$content_id";
 		$result=$this->execute($sql);
 		if( $result ){//content id does not exist so insert
-			if($this->canEdit($content_id, $user_id, $date->date)){
+			if($this->canEdit($content_id, $user_id)){
 				$sql = "UPDATE ".TABLE_PREFIX."shared_content_locking SET user_id=$user_id, last_modified='".$date->format('Y-m-d H:i:s')."' WHERE content_id=$content_id";
 				$result=$this->execute($sql);
 				if($result){
@@ -54,6 +54,8 @@ class SharedContentLockingDAO extends DAO {
 			}
 		}
 		else{
+                    $temp=$date->format('Y-m-d H:i:s');
+                    $temp="'$temp'";
 			$sql = "INSERT INTO ".TABLE_PREFIX."shared_content_locking(
 				content_id,
 				user_id,
@@ -62,7 +64,7 @@ class SharedContentLockingDAO extends DAO {
 				VALUES(
 					$content_id,
 					$user_id,
-					'$date->date'
+					$temp
 				)";
 			$result=$this->execute($sql);
 			if($result){
@@ -84,7 +86,7 @@ class SharedContentLockingDAO extends DAO {
 	 *          false, if not possible
 	 * @author  Ayush Datt
 	 */
-	public function canEdit($content_id, $user_id, $time)
+	public function canEdit($content_id, $user_id)
 	{
 		$sql = "SELECT * FROM ".TABLE_PREFIX."shared_content_locking WHERE content_id=$content_id";
 		$result=$this->execute($sql);

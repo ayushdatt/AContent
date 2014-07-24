@@ -19,7 +19,7 @@ require(TR_INCLUDE_PATH.'vitals.inc.php');
 require_once(TR_INCLUDE_PATH.'classes/Utility.class.php');
 include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 include(TR_INCLUDE_PATH.'classes/DAO/ContentDAO.class.php');
-$dao = new DAO();
+include(TR_INCLUDE_PATH.'classes/DAO/SharedContentLockingDAO.class.php');
 
 require(TR_INCLUDE_PATH.'header.inc.php');
 
@@ -43,6 +43,6 @@ if( isset($session_user_id) ){
 }
 
 $savant->assign('current_share_content', $current_share_content);
-$savant->display('sharecontent/current_share_content.tmpl.php');
+$savant->display('viewshared/index.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');
 ?>

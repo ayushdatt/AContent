@@ -18,12 +18,18 @@ require(TR_INCLUDE_PATH.'vitals.inc.php');
 require_once(TR_INCLUDE_PATH.'lib/tinymce.inc.php');
 require_once(TR_INCLUDE_PATH.'classes/FileUtility.class.php');
 require_once(TR_INCLUDE_PATH.'classes/DAO/DAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/SharedContentLockingDAO.class.php');
 
 Utility::authenticate(TR_PRIV_ISAUTHOR);
 
 /* In $cid abbiamo il numero della pagina aperta*/
 $cid = $_content_id;
 $dao = new DAO();
+$sharedContentLockingDAO = new SharedContentLockingDAO();
+
+ if($sharedContentLockingDAO->insertUpdate($cid, $_SESSION['user_id'])==false){
+    header('Location: '.TR_BASE_HREF.'viewshared/index.php');
+ }
 
 if ($_POST) {
 	$do_check = TRUE;
