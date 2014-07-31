@@ -45,12 +45,17 @@ require(TR_INCLUDE_PATH.'../home/editor/editor_tab_functions.inc.php');
 if ($_POST['close'] || $_GET['close']) {
 	if ($_GET['close']) {
 		$msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
+                $sharedContentLockingDAO->Delete($cid, $_SESSION['user_id']);
 	} else {
 		$msg->addFeedback('CLOSED');
 		if ($cid == 0) {
 			header('Location: '.TR_BASE_HREF.'home/course/index.php?_course_id='.$_course_id);
 			exit;
 		}
+                else
+                {
+                     $sharedContentLockingDAO->Delete($cid, $_SESSION['user_id']);
+                }
 	}
 	
 	if (!isset($_content_id) || $_content_id == 0) {
