@@ -399,6 +399,8 @@ $result=$dao->execute($sql);
     
                                            
 			$cid = $_POST['_cid'];
+                        $versions = new Versions();
+                        $versions->Create_Meta($cid,'E');
 		} else {
 			/* insert new */
 			$cid = $contentManager->addContent($_course_id,
@@ -416,12 +418,14 @@ $result=$dao->execute($sql);
 												  
 			$_POST['_cid']    = $cid;
 			$_REQUEST['_cid'] = $cid;
+                        $versions = new Versions();
+                        $versions->Create_Meta($cid,'A');
 		}
 
 		if ($cid == 0) return;
 
-        $versions = new Versions();
 		$versions->Create_Versions($cid, $_POST);
+                
 		// re-populate a4a tables based on the new content
 		populate_a4a($cid, $orig_body_text, $_POST['formatting']);
 		
