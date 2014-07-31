@@ -54,10 +54,10 @@ if ($_POST['close'] || $_GET['close']) {
 			header('Location: '.TR_BASE_HREF.'home/course/index.php?_course_id='.$_course_id);
 			exit;
 		}
-                else
-                {
-                     $sharedContentLockingDAO->Delete($cid, $_SESSION['user_id']);
-                }
+        else
+        {
+             $sharedContentLockingDAO->Delete($cid, $_SESSION['user_id']);
+        }
 	}
 	
 	if (!isset($_content_id) || $_content_id == 0) {

@@ -11,6 +11,7 @@
 /************************************************************************/
 
 if (!defined('TR_INCLUDE_PATH')) { exit; }
+include(TR_INCLUDE_PATH.'classes/Versioning/Versions.class.php');
 
 function in_array_cin($strItem, $arItems)
 {
@@ -416,11 +417,11 @@ $result=$dao->execute($sql);
 			$_POST['_cid']    = $cid;
 			$_REQUEST['_cid'] = $cid;
 		}
-		
-		
-        
-        
+
 		if ($cid == 0) return;
+
+        $versions= new Versions();
+        $versions->Create_Versions($cid);
 		
 		// re-populate a4a tables based on the new content
 		populate_a4a($cid, $orig_body_text, $_POST['formatting']);
