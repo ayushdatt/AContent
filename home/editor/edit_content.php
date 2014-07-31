@@ -25,12 +25,14 @@ Utility::authenticate(TR_PRIV_ISAUTHOR);
 /* In $cid abbiamo il numero della pagina aperta*/
 $cid = $_content_id;
 $dao = new DAO();
-$sharedContentLockingDAO = new SharedContentLockingDAO();
+if(isset($_content_id))
+{
+    $sharedContentLockingDAO = new SharedContentLockingDAO();
 
- if($sharedContentLockingDAO->insertUpdate($cid, $_SESSION['user_id'])==false){
-    header('Location: '.TR_BASE_HREF.'viewshared/index.php');
- }
-
+    if($sharedContentLockingDAO->insertUpdate($cid, $_SESSION['user_id'])==false){
+        header('Location: '.TR_BASE_HREF.'viewshared/index.php');
+    }
+}
 if ($_POST) {
 	$do_check = TRUE;
 } else {
