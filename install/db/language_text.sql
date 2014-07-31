@@ -897,6 +897,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_template', 'use_url_as_alternative', 'Use a remote URL as an alternative', '2010-06-22 11:54:25', ''),
 ('en', '_template', 'use_visual_editor', '<small style=\"text-decoration:underline;\">(Editor)</small>', '2010-03-24 15:54:22', ''),
 ('en', '_template', 'version_not_match', 'This update is for Transformable version %s. Does not match with your current Transformable version. The installation of it may break Transformable. Are you sure you want to proceed?', '2010-01-27 15:48:35', 'Updater'),
+('en', '_template', 'versions', 'Older Versions', '2014-03-11 14:37:01', ''),
 ('en', '_template', 'view', 'View', '2010-01-27 15:48:35', ''),
 ('en', '_template', 'view_message', 'View Message', '2010-01-27 15:48:35', ''),
 ('en', '_template', 'view_shared', 'Contents Shared with me', '2014-03-24 13:16:34', ''),

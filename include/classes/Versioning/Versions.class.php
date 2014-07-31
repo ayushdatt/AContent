@@ -35,10 +35,10 @@ class Versions {
     function Create_Versions($cid, $data){
     	//print_r($data);
     	//echo "haha $cid";
-        $myFile = $this->atticDir.$cid."_".$this->timeofversion.".txt";
-    	$fp = fopen($myFile,'w') or die("cannot open file");
+        $myFile = $this->atticDir.$cid."_".$this->timeofversion.".txt.gz";
+    	$fp = gzopen($myFile,'w') or die("cannot open file");
     	$dataToWrite = $data['title']."\n".$data['body_text'];
-    	fwrite($fp, $dataToWrite);
+    	gzwrite($fp, $dataToWrite);
         fclose($myFile);
     	//exit(0);
     }

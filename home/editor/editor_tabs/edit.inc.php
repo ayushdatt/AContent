@@ -79,7 +79,7 @@ global $_course_id, $contentManager;
         <li><img id="pastetool" class="fl-col" title="" src="" alt="" height="30" width="30"/><?php echo _AT('paste'); ?></li>
         <li><img id="filemantool" class="fl-col" title="" src="" alt="" height="30" width="30" /><?php echo _AT('files'); ?></li>
         <li><img id="forumtool" class="fl-col clickable" src="<?php echo TR_BASE_HREF.'images/home-forums.png'?>" title="<?php 'forum - '._AT('new_window'); ?>" alt="<?php echo 'forum - '._AT('new_window'); ?>" height="30" width="30" />Forum</li>
-           
+        <li><img id="previewtool" class="fl-col clickable" src="<?php echo TR_BASE_HREF.'images/versioning.png'?>" title="<?php echo _AT('versions').' - '._AT('new_window'); ?>" alt="<?php echo _AT('versions').' - '._AT('new_window'); ?>" height="30" width="30" /><?php echo _AT('versions'); ?></li>
 <!-- ******** Tool Manager ******* 
 <?php
 /*
