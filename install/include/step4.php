@@ -43,6 +43,33 @@ if (isset($_POST['submit'])) {
 			$errors[] = '<strong>'.$_POST['content_dir'].'/updater</strong> directory is not writable.';
 		}
 
+		//checking for folder content/versions
+        if (!is_dir($_POST['content_dir'].'/versions')) {
+                if (!@mkdir($_POST['content_dir'].'/versions')) {
+                        $errors[] = '<strong>'.$_POST['content_dir'].'/versions</strong> directory does not exist and cannot be created.';  
+                }
+        } else if (!is_writable($_POST['content_dir'].'/versions')){
+                $errors[] = '<strong>'.$_POST['content_dir'].'/versions</strong> directory is not writable.';
+        }
+       
+        //checking for folder content/versions/attic
+        if (!is_dir($_POST['content_dir'].'/versions/attic')) {
+                if (!@mkdir($_POST['content_dir'].'/versions/attic')) {
+                        $errors[] = '<strong>'.$_POST['content_dir'].'/versions/attic</strong> directory does not exist and cannot be created.';  
+                }
+        } else if (!is_writable($_POST['content_dir'].'/versions/attic')){
+                $errors[] = '<strong>'.$_POST['content_dir'].'/versions/attic</strong> directory is not writable.';
+        }
+       
+        //checking for folder content/versions/meta
+        if (!is_dir($_POST['content_dir'].'/versions/meta')) {
+                if (!@mkdir($_POST['content_dir'].'/versions/meta')) {
+                        $errors[] = '<strong>'.$_POST['content_dir'].'/versions/meta</strong> directory does not exist and cannot be created.';  
+                }
+        } else if (!is_writable($_POST['content_dir'].'/versions/meta')){
+                $errors[] = '<strong>'.$_POST['content_dir'].'/versions/meta</strong> directory is not writable.';
+        }
+
 		// content directory for the default HowTo lesson
 		if (!is_dir($_POST['content_dir'].'/1')) {
 			if (!@mkdir($_POST['content_dir'].'/1')) {

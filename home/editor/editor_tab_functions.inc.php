@@ -420,9 +420,8 @@ $result=$dao->execute($sql);
 
 		if ($cid == 0) return;
 
-        $versions= new Versions();
-        $versions->Create_Versions($cid);
-		
+        $versions = new Versions();
+		$versions->Create_Versions($cid, $_POST);
 		// re-populate a4a tables based on the new content
 		populate_a4a($cid, $orig_body_text, $_POST['formatting']);
 		
