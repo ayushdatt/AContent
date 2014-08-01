@@ -33,9 +33,22 @@ if( isset($session_user_id) ){
 	//find all the content shared with the current user
 	$sql="SELECT DISTINCT(content_id), content_author_id FROM ".TABLE_PREFIX."shared_content WHERE user_id=$session_user_id ORDER BY content_id";
 	$current_share_content=$dao->execute($sql);
+	//remove duplicate entries
 	if(is_array($current_share_content)){
-		if( is_array($current_share_content_group) )
-			$current_share_content=array_merge($current_share_content, $current_share_content_group);
+		if( is_array($current_share_content_group) ){
+			foreach ($current_share_content_group as $key => $value) {
+				$flag = 0;//does not match
+				foreach ($current_share_content as $keymatch => $valuematch) {
+					if($value === $valuematch){
+						$flag=1;//matched
+						break;
+					}
+				}
+				if($flag===0){
+					array_push($current_share_content, $value);
+				}
+			}
+		}
 	}
 	else{
 		$current_share_content = $current_share_content_group;
