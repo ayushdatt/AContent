@@ -21,12 +21,22 @@ require_once(TR_INCLUDE_PATH.'classes/DAO/ForumsCoursesDAO.class.php');
 require_once(TR_INCLUDE_PATH.'classes/DAO/ContentForumsAssocDAO.class.php');
 require_once(TR_INCLUDE_PATH.'classes/DAO/TestsDAO.class.php');
 require_once(TR_INCLUDE_PATH.'classes/DAO/ContentTestsAssocDAO.class.php');
+require_once(TR_INCLUDE_PATH.'classes/Versioning/Versions.class.php');
 
 global $_course_id;
 
 $coursesDAO = new CoursesDAO();
 $contentDAO = new ContentDAO();
 
+$cid=$_REQUEST['_cid'];
+if(isset($cid)){
+	$versions = new Versions();
+	$versions->get_Versions($cid);
+}
+else{
+	//TODO show warning
+	header('Location: '.TR_BASE_HREF.'home/index.php');
+}
 if ($_course_id > 0) {
 	Utility::authenticate(TR_PRIV_ISAUTHOR_OF_CURRENT_COURSE);
 } else {
@@ -98,6 +108,8 @@ if($_current_user->isAdmin()){
 	$user_rows = $dao->execute($sql);;
 }
 $savant->assign('isauthor', $user_rows);
+$savant->assign('revision_info', $versions->meta);
+$savant->assign('cid', $cid);
 
 global $onload;
 $onload = "document.form.title.focus();";
@@ -106,9 +118,5 @@ require(TR_INCLUDE_PATH.'header.inc.php');
 $savant->display('home/course/versions.tmpl.php');
 
 require(TR_INCLUDE_PATH.'footer.inc.php');
-
-
-
-
 
 ?>

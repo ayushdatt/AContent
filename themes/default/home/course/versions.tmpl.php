@@ -13,19 +13,27 @@ global $_current_user;
 global $languageManager;
 
 require_once(TR_INCLUDE_PATH.'classes/CoursesUtility.class.php');
+require_once(TR_INCLUDE_PATH.'classes/DAO/UsersDAO.class.php');
 ?>
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" name="form">
+<form method="post" action="<?php echo TR_BASE_HREF.'home/course/versions_difference.php'; ?>" name="form">
 <div class="input-form">
 <fieldset class="group_form">
 	<table id="page__revisions" class="form-data" align="center">
 	<?php
-	$variable=["temp","tempdata","tempdata","temp"];
-	foreach ($variable as $key => $value) {
+	print_r($this->revision_info);
+	$users = new UsersDAO();
+	foreach ($this->revision_info as $key => $value) {
+		echo "<br>";
+		print_r($value);
 	?>
         <tr>
-                <td align="left"><input type="checkbox" name="cid[]" value="1" onclick="maxTwoVersionSelection()"></td>
-                <td align="left"><label for="copyright"><?php echo _AT('course_copyright'); ?></label></td>	  	
+                <td align="left"><input type="checkbox" name="vid[]" value="<?php echo $this->cid.'_'.$value[0]; ?>" onclick="maxTwoVersionSelection()"><?php
+                echo $value[0]."\t";
+                echo date('d-m-Y', $value[0])."\t";
+                echo date('H:m:s', $value[0])."\t";
+                echo $users->getUserName($value[1]);
+                ?></td>
         </tr>
 	<?php
 	}
