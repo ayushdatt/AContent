@@ -791,6 +791,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_template', 'shortcuts', 'Shortcuts', '2010-02-08 14:27:03', ''),
 ('en', '_template', 'short_paragraph', 'Short Paragraph', '2010-03-25 15:11:39', ''),
 ('en', '_template', 'show', 'Show', '2003-05-20 12:26:32', ''),
+('en', '_template', 'show_differences_between_verions', 'Show differences between selected verions', '2014-07-31 15:48:35', ''),
 ('en', '_template', 'show_outline', 'Show outline', '2012-12-05 15:20:57', ''),
 ('en', '_template', 'show_templates', 'Show Templates', '2012-12-07 16:01:46', 'templating system'),
 ('en', '_template', 'sign_lang', 'Sign Language', '2010-05-21 15:57:28', ''),
