@@ -13,7 +13,7 @@
  */
 class Versions {
     //put your code here
-    var $varsionsDir,$atticDir,$metadir,$timeofversion;
+    var $varsionsDir,$atticDir,$metadir,$timeofversion,$meta,$counter;
     
     function Versions(){
         $this->versionsDir = TR_CONTENT_DIR."versions/";
@@ -41,5 +41,24 @@ class Versions {
     	gzwrite($fp, $dataToWrite);
         fclose($myFile);
     	//exit(0);
+    }
+    
+    function Get_Versions($cid)
+    {
+        $myFile = $this->metaDir.$cid.".txt";
+        $fp = fopen($myFile,'r') or die("cannot open file");
+        $this->counter = 0;
+        $this->meta=array();
+        
+        while (!feof($fp)){
+            $line = trim(fgets($fp));
+            if ($line == "") {
+                break;
+            }
+            $parts = explode("\t",$line);
+            $this->meta[$this->class]=$parts;
+            $this->class++;
+        }
+        fclose($fp);   
     }
 }
