@@ -21,21 +21,46 @@ require_once(TR_INCLUDE_PATH.'classes/DAO/UsersDAO.class.php');
 <fieldset class="group_form">
 	<table id="page__revisions" class="form-data" align="center">
 	<?php
-	print_r($this->revision_info);
+        $url=TR_BASE_HREF."home/editor/edit_content.php?_cid=".$this->cid;
+	//print_r($this->revision_info);
 	$users = new UsersDAO();
+        $checkIfFirst=0;
 	foreach ($this->revision_info as $key => $value) {
-		echo "<br>";
-		print_r($value);
+		//echo "<br>";
+		//print_r($value);
+              $url1=$url;
+            if($checkIfFirst===1){
+//                //if the latest version is not selected then send the version id of the pervious version
+                  $url1.="&_vid=".$value[0];
+            }
 	?>
         <tr>
                 <td align="left"><input type="checkbox" name="vid[]" value="<?php echo $this->cid.'_'.$value[0]; ?>" onclick="maxTwoVersionSelection()"><?php
-                echo $value[0]."\t";
+                //echo $value[0]."\t";
                 echo date('d-m-Y', $value[0])."\t";
-                echo date('H:m:s', $value[0])."\t";
-                echo $users->getUserName($value[1]);
+                echo date('H:i:s', $value[0])."\t";
+                ?><a href='<?php echo $url1; ?>'><?php echo $this->title_content."\t";?></a><?php
+                if($value[2]=='A'){
+                    echo _AT('created_by').$users->getUserName($value[1]);
+                }
+                else if($value[2]=='E'){
+                    echo _AT('edited_by').$users->getUserName($value[1]);
+                }
+                else if($value[2]=='R'){
+                    echo _AT('edited_by').$users->getUserName($value[1])."\t";
+                    if($value[3]){
+                        echo _AT('reverted_from');
+                        echo date('d-m-Y', $value[3])."\t";
+                        echo date('H:i:s', $value[3]);
+                    }
+                }
+                if($checkIfFirst===0){
+                    echo "<strong>\t"._AT('current')."</strong>";
+                }
                 ?></td>
         </tr>
 	<?php
+        $checkIfFirst=1;
 	}
 	?>
     </table>

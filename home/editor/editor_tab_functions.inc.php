@@ -396,11 +396,14 @@ $result=$dao->execute($sql);
         }
     }*/
     
-    
-                                           
 			$cid = $_POST['_cid'];
                         $versions = new Versions();
-                        $versions->Create_Meta($cid,'E');
+                        if(isset($_POST['_vid'])){
+                            $versions->Create_Meta($cid,'R',$_POST['_vid']);
+                        }
+                        else{
+                            $versions->Create_Meta($cid,'E');                            
+                        }
 		} else {
 			/* insert new */
 			$cid = $contentManager->addContent($_course_id,
@@ -417,7 +420,6 @@ $result=$dao->execute($sql);
 												  $content_type_pref);
 												  
 			$_POST['_cid']    = $cid;
-			$_REQUEST['_cid'] = $cid;
                         $versions = new Versions();
                         $versions->Create_Meta($cid,'A');
 		}

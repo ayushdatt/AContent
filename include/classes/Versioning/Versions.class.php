@@ -22,19 +22,24 @@ class Versions {
         $this->timeofversion=time();
     }
     
-    function Create_Meta($cid,$flag){
-         	
+    function Create_Meta($cid, $flag, $version_id=null){
         $myFile = $this->metaDir.$cid.".txt";
         $fp = fopen($myFile,'a') or die("cannot open file");
-        $dataToWrite = $this->timeofversion."\t".$_SESSION['user_id']."\t".$flag."\n";
+        if($version_id!=null){
+            $flag='R';
+            $dataToWrite = $this->timeofversion."\t".$_SESSION['user_id']."\t".$flag."\t".$version_id."\n";
+        }
+        else{
+            $dataToWrite = $this->timeofversion."\t".$_SESSION['user_id']."\t".$flag."\n";
+        }
+        
         fwrite($fp, $dataToWrite);
         fclose($myFile);
+        //exit(0);
     }
     
     
     function Create_Versions($cid, $data){
-    	//print_r($data);
-    	//echo "haha $cid";
         $myFile = $this->atticDir.$cid."_".$this->timeofversion.".txt.gz";
     	$fp = gzopen($myFile,'w') or die("cannot open file");
     	$dataToWrite = $data['title']."\n".$data['body_text'];
@@ -56,6 +61,27 @@ class Versions {
             $parts = explode("\t",$line);
             array_push($this->meta, $parts);
         }
+        $this->meta=  array_reverse($this->meta);
         fclose($fp);   
     }
+    
+    function get_Version_text($cid,$version_id)
+    {
+        $myFile = $this->atticDir.$cid."_".$version_id.".txt.gz";
+    	$fp = gzopen($myFile,'r') or die("cannot open file");
+    	fgets($fp); //Ignores the first line in the revision file
+        $version_text=fread($fp,filesize($myFile));
+        fclose($fp);   
+        return $version_text;
+    }
+    
+    function get_Version_title($cid,$version_id)
+    {
+        $myFile = $this->atticDir.$cid."_".$version_id.".txt.gz";
+    	$fp = gzopen($myFile,'r') or die("cannot open file");
+    	$title = trim(fgets($fp));
+        fclose($fp);   
+        return $title;
+    }
+    
 }

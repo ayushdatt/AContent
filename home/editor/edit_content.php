@@ -19,10 +19,13 @@ require_once(TR_INCLUDE_PATH.'lib/tinymce.inc.php');
 require_once(TR_INCLUDE_PATH.'classes/FileUtility.class.php');
 require_once(TR_INCLUDE_PATH.'classes/DAO/DAO.class.php');
 include(TR_INCLUDE_PATH.'classes/DAO/SharedContentLockingDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/Versions.class.php');
 
 Utility::authenticate(TR_PRIV_ISAUTHOR);
 
 /* In $cid abbiamo il numero della pagina aperta*/
+$_vid=$_GET['_vid'];
+
 $cid = $_content_id;
 $dao = new DAO();
 if(isset($_content_id))
@@ -54,10 +57,9 @@ if ($_POST['close'] || $_GET['close']) {
 			header('Location: '.TR_BASE_HREF.'home/course/index.php?_course_id='.$_course_id);
 			exit;
 		}
-        else
-        {
-             $sharedContentLockingDAO->Delete($cid, $_SESSION['user_id']);
-        }
+                else{
+                    $sharedContentLockingDAO->Delete($cid, $_SESSION['user_id']);
+                }
 	}
 	
 	if (!isset($_content_id) || $_content_id == 0) {
@@ -206,6 +208,12 @@ if ($current_tab == 0 || $current_tab == 2)
 //}
 
 $pid = intval($_REQUEST['pid']);
+
+if(isset($_vid)){
+    $versions=new Versions();
+    $version_text=$versions->get_Version_text($cid,$_vid);
+    $version_title=$versions->get_Version_title($cid,$_vid);
+}
 ?>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?_cid=<?php echo $cid; ?>" method="post" name="form" enctype="multipart/form-data">
@@ -221,8 +229,14 @@ $pid = intval($_REQUEST['pid']);
 			$_POST['formatting'] = $content_row['formatting'];
 			$_POST['head'] = $content_row['head'];
 			$_POST['use_customized_head'] = $content_row['use_customized_head'];
-			$_POST['title']      = $content_row['title'];
-			$_POST['body_text']  = $content_row['text'];
+                        if(isset($_vid)){
+                            $_POST['title']      = $version_title;
+                            $_POST['body_text']  = $version_text;
+                        }
+                        else{
+                            $_POST['title']      = $content_row['title'];
+                            $_POST['body_text']  = $content_row['text'];
+                        }
 			$_POST['weblink_text'] = $content_row['text'];
 			$_POST['keywords']   = $content_row['keywords'];
 			$_POST['test_message'] = $content_row['test_message'];                     
@@ -262,7 +276,10 @@ $pid = intval($_REQUEST['pid']);
 	
 	echo '<input type="hidden" name="_course_id" value="'.$_course_id.'" />';
 	echo '<input type="hidden" name="_cid" value="'.$cid.'" />';
-	echo '<input type="hidden" name="title" value="'.htmlspecialchars($stripslashes($_POST['title'])).'" />';
+        if(isset($_vid)){
+            echo '<input type="hidden" name="_vid" value="'.$_vid.'" />';
+        }
+        echo '<input type="hidden" name="title" value="'.htmlspecialchars($stripslashes($_POST['title'])).'" />';
 	if ($_REQUEST['sub'] == 1)
 	{
 		echo '<input type="hidden" name="sub" value="1" />';
