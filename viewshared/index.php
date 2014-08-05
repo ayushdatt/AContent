@@ -21,8 +21,6 @@ include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 include(TR_INCLUDE_PATH.'classes/DAO/ContentDAO.class.php');
 include(TR_INCLUDE_PATH.'classes/DAO/SharedContentLockingDAO.class.php');
 
-require(TR_INCLUDE_PATH.'header.inc.php');
-
 $dao = new DAO();
 $session_user_id = $_SESSION['user_id'];
 $current_share_content = array();
@@ -55,6 +53,10 @@ if( isset($session_user_id) ){
 	}
 }
 
+if(isset($_GET['cannotOpen']) && $_GET['cannotOpen']==="true"){
+	$msg->addError('CONTENT_LOCKED');
+}
+require(TR_INCLUDE_PATH.'header.inc.php');
 $savant->assign('current_share_content', $current_share_content);
 $savant->display('viewshared/index.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');

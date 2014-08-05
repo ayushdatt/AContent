@@ -47,6 +47,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_msgs', 'TR_ERROR_CHOOSE_UNINSTALLED_PATCH', 'Please choose an uninstalled update.', '2010-08-09 13:57:22', ''),
 ('en', '_msgs', 'TR_ERROR_CHOOSE_UNINSTALLED_UPDATE', 'Please choose an uninstalled update.', '2010-01-27 15:48:35', 'Updater: error msg'),
 ('en', '_msgs', 'TR_ERROR_CONFIRM_BAD', 'Your email address and account could not be confirmed.', '2010-01-27 15:48:35', ''),
+('en', '_msgs', 'TR_ERROR_CONTENT_LOCKED', 'Content locked by some other user. Please try after some time', '2014-08-7 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_DB_NOT_UPDATED', 'Information could not be added to the database.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_DIR_NOT_DELETED', 'Cannot open directory to be deleted.', '2010-04-06 14:42:19', ''),
 ('en', '_msgs', 'TR_ERROR_DIR_NOT_EXIST', 'Directory <strong>%s</strong> does not exist. Please create it.', '2010-04-07 13:47:52', ''),

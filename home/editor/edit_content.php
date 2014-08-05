@@ -33,7 +33,7 @@ if(isset($_content_id))
     $sharedContentLockingDAO = new SharedContentLockingDAO();
 
     if($sharedContentLockingDAO->insertUpdate($cid, $_SESSION['user_id'])==false){
-        header('Location: '.TR_BASE_HREF.'viewshared/index.php');
+        header('Location: '.TR_BASE_HREF.'viewshared/index.php?cannotOpen=true');
     }
 }
 if ($_POST) {
@@ -215,7 +215,15 @@ if(isset($_vid)){
     $version_title=$versions->get_Version_title($cid,$_vid);
 }
 ?>
-
+<script type="text/javascript">
+	var timemoutInterval=setInterval(function(){
+		showWarning();
+	}, 14*60*1000);
+	function showWarning(){
+		alert("Your lock is about to expire in a minute. Please save your content and refresh the page to avoid conficts");
+		window.clearInterval(timemoutInterval);
+	}
+</script>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?_cid=<?php echo $cid; ?>" method="post" name="form" enctype="multipart/form-data">
 <?php
 
