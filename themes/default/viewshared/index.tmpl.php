@@ -28,6 +28,9 @@ if ( isset($_current_user) )
 		$courseContentDAO = new ContentDAO();
 		$usersDao = new UsersDAO();
 		foreach ($this->current_share_content as $row) {
+			if($row['content_author_id']===$session_user_id){
+				continue;
+			}
 			$output .= "<tr><td>";
 			$currCourse = $courseContentDAO->get($row['content_id']);
 			$output .= "<a href='".TR_BASE_HREF."home/course/content.php?_cid=".$currCourse['content_id']."'>".$currCourse['title']."</a>";

@@ -126,6 +126,9 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 						$result=$usersDAO->getAll();
 						$flagFoundUsers = 0;
 						foreach ($result as $row) {
+							if($row['user_id']===$session_user_id){
+								continue;
+							}
 							$flagFoundUsers = 1;
 							$cur_group=$row['group_name'];
 							$user_name='';
@@ -152,7 +155,6 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 						if($flagFoundUsers === 0){
 							echo "No Users Found";
 						}
-
 						echo $output;
 					?>
 				</tbody>

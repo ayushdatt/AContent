@@ -20,7 +20,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 ?>
 	<div class="input-form">
 		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']."?_course_id=$_course_id&_cid=$_cid"; ?>" method="POST">
-		<h3><u>Select Content to Share</u></h3><br>
+		<h3><u>Select Content</u></h3><br>
 		<table><tbody>
 		<?php
 		$userCoursesDAO = new UserCoursesDAO();
@@ -136,23 +136,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 							foreach ($this->shared_users as $shared_user) {
 								$flagFoundUsers = 1;
 								$row=$usersDAO->getUserByID($shared_user['user_id']);
-								$user_name='';
-								if ($row['first_name'] <> '' && $row['last_name'] <> '')
-								{
-									$user_name = $row['first_name']. ' '.$row['last_name'];
-								}
-								else if ($row['first_name'] <> '')
-								{
-									$user_name = $row['first_name'];
-								}
-								else if ($row['last_name'] <> '')
-								{
-									$user_name = $row['last_name'];
-								}
-								else
-								{
-									$user_name = $row['login'];
-								}
+								$user_name=$usersDAO->getUserName($row['user_id']);
 								$output .= "<tr><td><input name=\"revoke_user_id[]\" value=".$row['user_id']." type=\"checkbox\"></td><td>$user_name</td></tr>";								
 							}
 							if($flagFoundUsers === 0){
