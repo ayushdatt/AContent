@@ -53,6 +53,9 @@ if (!defined('TR_INCLUDE_PATH')) { exit; }
  * back_to_page              array('url', 'title')            the link back to the part of the current page, if needed.
  */
 include_once(TR_INCLUDE_PATH.'classes/Utility.class.php');
+require_once(TR_INCLUDE_PATH. 'classes/DAO/SharedContentDAO.class.php');
+require_once(TR_INCLUDE_PATH. 'classes/DAO/ContentDAO.class.php');
+require_once(TR_INCLUDE_PATH. 'classes/DAO/CoursesDAO.class.php');
 $lang_charset = "UTF-8";
 //Timer
 $mtime = microtime(); 
@@ -219,9 +222,13 @@ foreach ($this->top_level_pages as $page) {
    <li><a href="<?php echo $link['url']; ?>"><img src="<?php echo $link['icon']; ?>" alt="<?php echo $link['title']; ?>"  title="<?php echo $link['title']; ?>" class="shortcut_icon"/><!-- <?php echo $link['title']; ?> --></a></li>
       <?php } ?>
     <?php } ?>
-  <?php } ?>
+<?php } ?>
   
-  <?php if (isset($this->course_id) && $this->course_id > 0) {?>
+  <?php
+  $sharedContentDAO = new SharedContentDAO();
+  $contentDAO = new ContentDAO();
+  $coursesDAO = new CoursesDAO();
+  if (isset($this->course_id) && $this->course_id > 0) {?>
       <?php if ($this->isAuthor || $this->isAdmin) { // only for authors or admins ?>
       <li><a href="<?php echo $this->base_path; ?>home/course/course_property.php?_course_id=<?php echo $this->course_id; ?>">
         <img src="<?php echo $this->base_path. "themes/".$this->theme."/images/course_property.png"; ?>" title="<?php echo _AT('course_property'); ?>" alt="<?php echo _AT('course_property'); ?>" border="0"  class="shortcut_icon"/>
@@ -239,11 +246,18 @@ foreach ($this->top_level_pages as $page) {
         <img src="<?php echo $this->base_path. "themes/".$this->theme."/images/delete.gif"; ?>" title="<?php echo _AT('del_course'); ?>" alt="<?php echo _AT('del_course'); ?>" border="0"  class="shortcut_icon"/>
         </a>
       </li>
+      <?php }
+      if(isset($_GET['_cid'])){
+        $contentInfo = $contentDAO->get($_GET['_cid']);
+        $courseInfo = $coursesDAO->get($contentInfo['course_id']);
+        if( $_SESSION['user_id']===$courseInfo['user_id'] || $sharedContentDAO->isShared($_SESSION['user_id'],$_GET['_cid']) ) {
+          ?>
       <li><a href="<?php echo $this->base_path; ?>home/course/versions.php?_cid=<?php echo $_REQUEST['_cid']; ?>">
         <img src="<?php echo $this->base_path. "themes/".$this->theme."/images/versioning.png"; ?>" title="<?php echo _AT('revisions'); ?>" alt="<?php echo _AT('course_property'); ?>" border="0"  class="shortcut_icon"/>
         </a>
       </li>
-      <?php }?>
+      <?php }
+      } ?>
       <li><a href="<?php echo $this->base_path; ?>home/index.php">
         <img src="<?php echo $this->base_path. "themes/".$this->theme."/images/exit.png"; ?>" title="<?php echo _AT('exit_course'); ?>" alt="<?php echo _AT('exit_course'); ?>" border="0"  class="shortcut_icon"/>
         </a>

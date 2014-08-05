@@ -17,7 +17,7 @@
 */
 
 if (!defined('TR_INCLUDE_PATH')) exit;
-
+require_once(TR_INCLUDE_PATH. 'classes/DAO/SharedContentDAO.class.php');
 class ContentUtility {
 
 	/**
@@ -755,6 +755,13 @@ class ContentUtility {
 				  'icon' => $_base_href . 'images/page_delete.gif');
 			}
 		}
+                $sharedContentDAO = new SharedContentDAO();
+		if (isset($_current_user) && isset($_GET['_cid']) && $sharedContentDAO->isShared($_SESSION['user_id'],$_GET['_cid'])) {
+       		    $tool_shortcuts[] = array(
+		        'title' => _AT('edit_this_page'),   
+		        'url' => $_base_href . 'home/editor/edit_content.php?_cid='.$content_row['content_id'],
+		        'icon' => $_base_href . 'images/medit.gif');
+                }
 		return $tool_shortcuts;
 
 //	if (isset($_current_user) && $_current_user->isAuthor($_course_id)) {

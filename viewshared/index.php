@@ -14,9 +14,9 @@
 define('TR_INCLUDE_PATH', '../include/');
 require(TR_INCLUDE_PATH.'vitals.inc.php');
 require_once(TR_INCLUDE_PATH.'classes/Utility.class.php');
-include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
-include(TR_INCLUDE_PATH.'classes/DAO/ContentDAO.class.php');
-include(TR_INCLUDE_PATH.'classes/DAO/SharedContentLockingDAO.class.php');
+include_once(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include_once(TR_INCLUDE_PATH.'classes/DAO/ContentDAO.class.php');
+include_once(TR_INCLUDE_PATH.'classes/DAO/SharedContentLockingDAO.class.php');
 
 $dao = new DAO();
 $session_user_id = $_SESSION['user_id'];
