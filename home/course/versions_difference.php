@@ -19,14 +19,43 @@ function html_diff($cid, $l_vid, $r_vid, $type=null){
     } else {
         $tdf = new TableDiffFormatter();
     }
-
+    $url=TR_BASE_HREF."home/editor/edit_content.php?_cid=".$_GET['_cid'];
+    $l_head=date('d-m-Y', $l_vid)."\t".date('H:i:s', $l_vid);
+    $r_head=date('d-m-Y', $r_vid[0])."\t".date('H:i:s', $r_vid);            
     ?>
     <div class="dokuwiki">
-	    <div class="table">
+	<div class="table">
 	    <table class="diff diff_<?php echo $type?>">
+             <?php
+        //navigation and header
+            if($type == 'inline') {
+            ?>
+                <tr>
+                    <th class="diff-lineheader">-</th>
+                    <th>
+                        <?php echo $l_head ?>
+                    </th>
+                </tr>
+           
+                <tr>
+                    <th class="diff-lineheader">+</th>
+                    <th>
+                        <?php echo $r_head ?>
+                    </th>
+                </tr>
+            <?php } else { ?>
+                <tr>
+                    <th colspan="2">
+                        <?php echo $l_head ?>
+                    </th>
+                    <th colspan="2">
+                        <?php echo $r_head ?>
+                    </th>
+                </tr>
+        <?php }
 
-	    <?php
-	        echo html_insert_softbreaks($tdf->format($df));
+	   
+	    echo html_insert_softbreaks($tdf->format($df));
 	    ?>
 
 	    </table>

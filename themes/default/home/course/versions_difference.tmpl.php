@@ -18,8 +18,10 @@
 $vid1=$_POST['vid'][0];
 $vid2=$_POST['vid'][1];
 $cid=$_GET['_cid'];
+if(isset($vid1) && isset($vid2) && isset($cid)){
+    html_diff($cid,$vid2,$vid1); 
+}
 
-html_diff($cid,$vid1,$vid2); 
 ?>
 </fieldset>
 </div>

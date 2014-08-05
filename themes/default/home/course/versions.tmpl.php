@@ -14,7 +14,7 @@ global $languageManager;
 
 ?>
 
-<form method="post" action="<?php echo TR_BASE_HREF.'home/course/versions_difference.php?_cid='.$this->cid; ?>" name="form">
+<form method="post" action="<?php echo TR_BASE_HREF.'home/course/versions_difference.php?_cid='.$this->cid; ?>" name="form">    
 <div class="input-form">
 <fieldset class="group_form">
 	<table id="page__revisions" class="form-data" align="center">
@@ -24,8 +24,6 @@ global $languageManager;
 	$users = new UsersDAO();
         $checkIfFirst=0;
 	foreach ($this->revision_info as $key => $value) {
-		//echo "<br>";
-		//print_r($value);
               $url1=$url;
             if($checkIfFirst===1){
 //                //if the latest version is not selected then send the version id of the pervious version
