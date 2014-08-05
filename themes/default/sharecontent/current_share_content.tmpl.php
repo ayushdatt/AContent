@@ -1,8 +1,5 @@
 <?php
 
-
-//review***************** this file is copied from create_course.tmpl.php and my_course.inc.php and then changes are made to it..
-
 /************************************************************************/
 /* AContent                                                             */
 /************************************************************************/

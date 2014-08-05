@@ -1,8 +1,5 @@
 <?php
 
-//review***************** this file is copied from create_course.php and then changes are made to it..
-
-
 /************************************************************************/
 /* AContent                                                             */
 /************************************************************************/
@@ -62,9 +59,6 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 		    }
 	    }
 	}
-}
-else{
-	//echo "things not set";
 }
 
 extract($_GET);
