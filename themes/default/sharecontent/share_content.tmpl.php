@@ -91,11 +91,11 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 							foreach ($result as $row) {
 								$cur_group=$row['group_name'];
 								if($prev_group === ''){
-									$output .= "<tr><td><input name=\"share_group_name[]\" value=".$row['group_name']." type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
+									$output .= "<tr><td><input name=\"share_group_name[]\" value=\"".$row['group_name']."\" type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
 									$prev_group=$cur_group;
 								}
 								if($prev_group !== $cur_group){
-									$output .= "<tr><td><input name=\"share_group_name[]\" value=".$row['group_name']." type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
+									$output .= "<tr><td><input name=\"share_group_name[]\" value=\"".$row['group_name']."\" type=\"checkbox\"></td><td><strong>$cur_group</strong></td></tr>";
 									$prev_group=$cur_group;
 								}
 								$user_id=$usersDAO->getUserName($row['user_id']);
