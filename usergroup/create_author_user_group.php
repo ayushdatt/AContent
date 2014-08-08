@@ -13,11 +13,13 @@
 define('TR_INCLUDE_PATH', '../include/');
 include(TR_INCLUDE_PATH.'vitals.inc.php');
 include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
 $results_per_page = 50;
 $dao = new DAO();
+$groups_users=new GroupsUsersDAO();
 $group_creator=$_SESSION['user_id'];
 
 if( isset($_POST['group_name']) && (!isset($_POST['id'])) )  {
@@ -28,30 +30,21 @@ if( isset($_POST['group_name']) && $_POST['group_name']=='')
 {
     $msg->addError('GROUP_NAME_MANDATORY');
 }
-//Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
+
 else if( (isset($_POST['group_name'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
 	extract($_POST);
 	$group_creator=$_SESSION['user_id'];
         
-        $sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator";
-        $result=$dao->execute($sql);
-        if( $result <> 0)
+        $result=$groups_users->getUsersofGroup($group_name,$group_creator);
+        print_r($result);
+        if($result)// returns true if user group already exists
         {
             $msg->addError('USER_GROUP_EXISTS');
         }
         else
         {
             for($i=0;$i<count($_POST['id']);$i++){
-                    $sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator AND user_id=$id[$i]";
-                    $result=$dao->execute($sql);
-                    if($result){
-                            //do nothing duplicate entry
-                    }
-                    else{
-                            $sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
-                                                    VALUES ('".$group_name."',".$group_creator.",".$id[$i].")";
-                            $dao->execute($sql);
-                    }
+                $groups_users->insertUsers($group_name, $group_creator, $id[$i]);
             }
         $msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
 	header('Location: index.php');

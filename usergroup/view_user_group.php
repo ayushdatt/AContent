@@ -26,9 +26,9 @@ if ($_GET['reset_filter']) {
 if(isset($_GET['id']))
 {
     $group_name=$_GET['id'];
+    $savant->assign('group_name', $group_name);
     $group_name="'$group_name'";
     $_SESSION['group_name']=$group_name;
-   //$savant->assign('group_name', $group_name);
 }
 else
 {
@@ -141,7 +141,7 @@ $savant->assign('page_string', $page_string);
 $savant->assign('orders', $orders);
 $savant->assign('order', $order);
 $savant->assign('col', $col);
-$savant->assign('group_name', $group_name);
+
 
 $savant->display('usergroup/view_user_group.tmpl.php');
 

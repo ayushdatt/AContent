@@ -11,9 +11,9 @@
 /************************************************************************/
 
 /**
- * DAO for "user_groups" table
+ * DAO for "group_users" table
  * @access	public
- * @author	Cindy Qi Li
+ * @author	Ayush Datta
  * @package	DAO
  */
 
@@ -26,118 +26,31 @@ class GroupsUsersDAO extends DAO {
 	/**
 	 * Create a new user group
 	 * @access  public
-	 * @param   title
-	 *          description
-	 * @return  user id, if successful
-	 *          false and add error into global var $msg, if unsuccessful
-	 * @author  Cindy Qi Li
+	 * @param   group_name: Name of the group
+	 *          group_creator: Current loggedin user
+         *          user_id: user to be inserted into the group
+	 * @return  true if successful
+         *          error message array if failed; false if update db failed
+	 * @author  Ayush Datta
 	 */
-	public function Create($title, $description)
-	{
-		global $addslashes, $msg;
-
-		$missing_fields = array();
-		
-		//$title = $addslashes(trim($title));
-		//$description = $addslashes(trim($description));
-		
-		if ($title == '')
-		{
-			$missing_fields[] = _AT('title');
-		}
-
-		if ($missing_fields)
-		{
-			$missing_fields = implode(', ', $missing_fields);
-			$msg->addError(array('EMPTY_FIELDS', $missing_fields));
-		}
-
-		if (!$msg->containsErrors())
-		{
-			/* insert into the db */
-			$sql = "INSERT INTO ".TABLE_PREFIX."user_groups
-			              (title,
-			               description,
-			               create_date
-			               )
-			       VALUES ('".$title."',
-			               '".$description."',
-			               now()
-			              )";
-
-			if (!$this->execute($sql))
-			{
-				$msg->addError('DB_NOT_UPDATED');
-				return false;
-			}
-			else
-			{
-				return mysql_insert_id();
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
+        public function insertUsers($group_name, $group_creator, $id){
+            $sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
+                                                    VALUES ('".$group_name."',".$group_creator.",".$id.")";
+            return $this->execute($sql);
+        }
+	
+        
 	/**
-	 * Update an existing user group
+	 * Update an existing user groupname 
 	 * @access  public
-	 * @param   user_group_id
-	 *          title
-	 *          description
-	 * @return  user id, if successful
-	 *          false and add error into global var $msg, if unsuccessful
-	 * @author  Cindy Qi Li
-	 */
-	public function Update($user_group_id, $title, $description)
-	{
-		global $addslashes, $msg;
-
-		$missing_fields = array();
-
-		/* email check */
-		$user_group_id = intval($user_group_id);
-		$title = $addslashes(trim($title));
-		$description = $addslashes(trim($description));
-		
-		/* login name check */
-		if ($title == '')
-		{
-			$missing_fields[] = _AT('title');
-		}
-
-		if ($missing_fields)
-		{
-			$missing_fields = implode(', ', $missing_fields);
-			$msg->addError(array('EMPTY_FIELDS', $missing_fields));
-		}
-
-		if (!$msg->containsErrors())
-		{
-			/* insert into the db */
-			$sql = "UPDATE ".TABLE_PREFIX."user_groups
-			           SET title = '".$title."',
-			               description = '".$description."',
-			               last_update = now()
-			         WHERE user_group_id = ".$user_group_id;
-
-			return $this->execute($sql);
-		}
-	}
-
-	/**
-	 * Update an existing user group record
-	 * @access  public
-	 * @param   userGroupID: user group ID
+	 * @param   GroupName: name of the user group to be updated
 	 *          fieldName: the name of the table field to update
 	 *          fieldValue: the value to update
 	 * @return  true if successful
 	 *          error message array if failed; false if update db failed
-	 * @author  Cindy Qi Li
+	 * @author  Ayush Datta
 	 */
-	public function UpdateField($userGroupID, $fieldName, $fieldValue)
+	public function UpdateField($GroupName, $fieldName, $fieldValue)
 	{
 		global $addslashes;
                 $group_creator=$_SESSION['user_id'];
@@ -146,17 +59,17 @@ class GroupsUsersDAO extends DAO {
 		
 		$sql = "UPDATE ".TABLE_PREFIX."group_users 
 		           SET ".$addslashes($fieldName)."='".$addslashes($fieldValue)."'
-		         WHERE group_name = ".$userGroupID." AND group_creator=".$group_creator;
+		         WHERE group_name = ".$GroupName." AND group_creator=".$group_creator;
 		
 		return $this->execute($sql);
 	}
 	
 	/**
-	 * delete user group by given user id
+	 * delete user group by given group name created by logged in user
 	 * @access  public
-	 * @param   user group id
+	 * @param   user group_name
 	 * @return  true / false
-	 * @author  Cindy Qi Li
+	 * @author  Ayush Datta
 	 */
 	public function Delete($Group_name)
 	{
@@ -168,7 +81,7 @@ class GroupsUsersDAO extends DAO {
 	 * Return all user groups' information
 	 * @access  public
 	 * @param   none
-	 * @return  usergroup rows
+	 * @return  group_users rows
 	 * @author  Ayush Datta
 	 */
 	public function getAll()
@@ -177,21 +90,39 @@ class GroupsUsersDAO extends DAO {
 		return $this->execute($sql);
 	}
 
-	/**
-	 * Return user information by given user id
+        /**
+	 * Return if the user group is existing or not
 	 * @access  public
-	 * @param   user group id
-	 * @return  user row
-	 * @author  Cindy Qi Li
+	 * @param   group_name: the name of the group user wants to create
+         *          group_creator: presently loggid in user
+	 * @return  true if user group exits and false if user group does not exist
+	 * @author  Ayush Datta
 	 */
-	public function getUserGroupByID($user_group_id)
-		{
-		$user_group_id = intval($user_group_id);
-		$sql = 'SELECT * FROM '.TABLE_PREFIX.'user_groups WHERE user_group_id='.$user_group_id;
-		if ($rows = $this->execute($sql))
-		{
-			return $rows[0];
-		}
-	}
+        public function getUsersofGroup($group_name,$group_creator)
+        {
+            $sql = "SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator";
+            if ($result=$this->execute($sql))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        /**
+	 * Return if the user group is existing or not
+	 * @access  public
+	 * @param   group_creator: presently loggid in user
+         *          search: search tags searched by user
+	 * @return  count of rows
+	 * @author  Ayush Datta
+	 */
+        public function getGroupCount($group_creator,$search)
+        {
+            $sql = "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator=$group_creator AND $search";
+            return $this->execute($sql);
+        }
 }
 ?>

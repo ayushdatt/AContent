@@ -19,7 +19,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 ?>
 	<div class="input-form">
 		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-		<h3><u>Select Content to Share</u></h3><br>
+                    <h3><u><?php echo _AT('select_content_to_share');?></u></h3><br>
 		<table><tbody>
 		<?php
 		$userCoursesDAO = new UserCoursesDAO();
@@ -70,7 +70,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 		<br>
 		<table border="1"><tbody><tr>
 		<td style="vertical-align: top;">
-			<h3><u>Select Groups to Share Content With</u></h3><br>
+                    <h3><u><?php echo _AT('select_groups_to_share_with'); ?></u></h3><br>
 			<table>
 				<tbody>
 					<?php
@@ -114,7 +114,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 			</table>
 		</td>
 		<td style="vertical-align: top;">
-			<h3><u>Select Users to Share Content With</u></h3><br>
+			<h3><u><?php echo _AT('select_users_to_share_with'); ?></u></h3><br>
 			<table>
 				<tbody>
 					<?php

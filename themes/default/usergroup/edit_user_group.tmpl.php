@@ -115,7 +115,8 @@ include(TR_INCLUDE_PATH.'header.inc.php');
                         
                         <tr onmousedown="document.form['m<?php echo $row['user_id']; ?>'].checked = !document.form['m<?php echo $row['user_id']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['user_id']; ?>');" 
 			    onkeydown="document.form['m<?php echo $row['user_id']; ?>'].checked = !document.form['m<?php echo $row['user_id']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['user_id']; ?>');"
-			    id="rm<?php echo $row['user_id']; ?>">
+                            id="rm<?php echo $row['user_id']; ?>"
+                                   <?php if($value==1) { ?> class="selected" <?php } ?> >
 			<td>
                             <?php if($value==1){ ?>
                             <input type="checkbox" name="id[]" value="<?php echo $row['user_id']; ?>" id="m<?php echo $row['user_id']; ?>" 

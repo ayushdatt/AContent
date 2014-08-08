@@ -30,8 +30,8 @@ View Differences:
 <select name="difftype" onchange="javascript: submit()">
 <option value="side"<?php if(($_POST['difftype']=="side") || (!$_POST['difftype'])){
 echo "selected='selected'";
-}?>>Side By Side</option>
-<option value="inline" <?php if($_POST['difftype']=="inline") echo "selected='selected'";?>>Inline</option>
+}?>><?php echo _AT('side_by_side'); ?></option>
+<option value="inline" <?php if($_POST['difftype']=="inline") echo "selected='selected'";?>><?php echo _AT('inline'); ?></option>
 </select>
 <?php
    if(isset($_POST['difftype'])){

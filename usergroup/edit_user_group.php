@@ -13,11 +13,13 @@
 define('TR_INCLUDE_PATH', '../include/');
 include(TR_INCLUDE_PATH.'vitals.inc.php');
 include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
 $results_per_page = 50;
 $dao = new DAO();
+$groups_users=new GroupsUsersDAO();
 
 // page initialize
 if ($_GET['reset_filter']) {
@@ -26,9 +28,7 @@ if ($_GET['reset_filter']) {
 if(isset($_GET['id']))
 {
     $group_name=$_GET['id'];
-    $group_name="'$group_name'";
     $_SESSION['group_name']=$group_name;
-   //$savant->assign('group_name', $group_name);
 }
 else
 {
@@ -37,25 +37,15 @@ else
 $group_creator=$_SESSION['user_id'];
 
 
-//Handle submit of form2, no validation that the current user is an author.. just that his user id should be in the session variable
 if( (isset($_POST['modify_group'])) && (isset($_POST['id'])) && (isset($_SESSION['user_id'])) && (count($_POST['id']) > 0) ){
 	extract($_POST);
 	$group_creator=$_SESSION['user_id'];
         
-        $sql="DELETE FROM ".TABLE_PREFIX."group_users WHERE group_name=$group_name AND group_creator=$group_creator";
+        $sql="DELETE FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator";
         $result=$dao->execute($sql);
         
             for($i=0;$i<count($_POST['id']);$i++){
-                    $sql="SELECT * FROM ".TABLE_PREFIX."group_users WHERE group_name=$group_name AND group_creator=$group_creator AND user_id=$id[$i]";
-                    $result=$dao->execute($sql);
-                    if($result){
-                            //do nothing duplicate entry
-                    }
-                    else{
-                            $sql="INSERT INTO ".TABLE_PREFIX."group_users (group_name, group_creator, user_id)
-                                                    VALUES (".$group_name.",".$group_creator.",".$id[$i].")";
-                            $dao->execute($sql);
-                    }
+                    $groups_users->insertUsers($group_name, $group_creator, $id[$i]);
             }
         $msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
 	header('Location: index.php');
@@ -118,7 +108,7 @@ if ($_GET['search']) {
 }
 
 $sql	= "SELECT COUNT(GU.user_id) AS cnt FROM ".TABLE_PREFIX."users U , ".TABLE_PREFIX."group_users GU"
-        . "  WHERE U.user_id=GU.user_id AND $search AND GU.group_creator=$group_creator AND GU.group_name=$group_name";
+        . "  WHERE U.user_id=GU.user_id AND $search AND GU.group_creator=$group_creator AND GU.group_name='$group_name'";
 
 $rows = $dao->execute($sql);
 $num_results_selected = $rows[0]['cnt'];
@@ -144,7 +134,7 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 
 $sql = "SELECT U.user_id, U.first_name, U.last_name, U.email
           FROM ".TABLE_PREFIX."users U,".TABLE_PREFIX."group_users GU"
-          . " WHERE U.user_id=GU.user_id AND GU.group_creator=$group_creator AND GU.group_name=$group_name AND $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+          . " WHERE U.user_id=GU.user_id AND GU.group_creator=$group_creator AND GU.group_name='$group_name' AND $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows_selected = $dao->execute($sql);
 

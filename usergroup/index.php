@@ -17,8 +17,9 @@ include_once(TR_INCLUDE_PATH.'classes/DAO/SharedContentDAO.class.php');
 unset($_SESSION['course_id']);
 
 // initialize constants
-$results_per_page = 5;
+$results_per_page = 50;
 $dao = new DAO();
+$groupsUsersDAO = new GroupsUsersDAO();
 $group_creator=$_SESSION['user_id'];
 
 if ( (isset($_GET['edit']) || isset($_GET['view'])) && (isset($_GET['id']) && count($_GET['id']) > 1) ) {
@@ -75,11 +76,8 @@ if ($_GET['search']) {
 	$search = '1';
 }
 
-$sql	= "SELECT COUNT(distinct(group_name)) as cnt FROM ".TABLE_PREFIX."group_users WHERE group_creator=$group_creator AND $search";
-//$sql	= "SELECT COUNT(user_id) AS cnt FROM ".TABLE_PREFIX."users U WHERE $search";
-$rows = $dao->execute($sql);
+$rows = $groupsUsersDAO->getGroupCount($group_creator,$search);
 $num_results = $rows[0]['cnt'];
-//$num_results = 5;
 
 $num_pages = max(ceil($num_results / $results_per_page), 1);
 $page = intval($_GET['p']);
@@ -94,20 +92,11 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 	$results_per_page = 999999;
 }
 
-/*$sql = "SELECT U.user_id, U.login
-          FROM ".TABLE_PREFIX."users U
-          WHERE $search ORDER BY $col $order LIMIT $offset, $results_per_page";
-*/
 $sql = "SELECT distinct(group_name)
           FROM ".TABLE_PREFIX."group_users
           WHERE $search AND group_creator=$group_creator ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
-
-$groupsUsersDAO = new GroupsUsersDAO();
-
-//$sql = 'SELECT * FROM '.TABLE_PREFIX.'group_users ORDER BY group_name';
-//$data_group_users=$dao->execute($sql);
                 
 $savant->assign('user_rows', $user_rows);
 $savant->assign('all_user_groups', $groupsUsersDAO->getAll());
