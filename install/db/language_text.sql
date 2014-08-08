@@ -797,6 +797,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_template', 'sent_via_transformable', 'Sent via an AContent system at %s', '2010-06-10 10:29:49', ''),
 ('en', '_template', 'set_preset', 'Apply Preset', '2010-03-24 13:16:34', ''),
 ('en', '_template', 'share_content', 'Share Content', '2010-03-24 13:16:34', ''),
+('en', '_template', 'shared_with_me', ' by %s', '2014-03-24 13:16:34', ''),
 ('en', '_template', 'shortcuts', 'Shortcuts', '2010-02-08 14:27:03', ''),
 ('en', '_template', 'short_paragraph', 'Short Paragraph', '2010-03-25 15:11:39', ''),
 ('en', '_template', 'show', 'Show', '2003-05-20 12:26:32', ''),

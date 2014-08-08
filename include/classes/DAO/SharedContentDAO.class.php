@@ -24,110 +24,6 @@ require_once(TR_INCLUDE_PATH. 'classes/DAO/DAO.class.php');
 class SharedContentDAO extends DAO {
 
 	/**
-	 * Create a new user group
-	 * @access  public
-	 * @param   title
-	 *          description
-	 * @return  user id, if successful
-	 *          false and add error into global var $msg, if unsuccessful
-	 * @author  Cindy Qi Li
-	 */
-	public function Create($title, $description)
-	{
-		global $addslashes, $msg;
-
-		$missing_fields = array();
-		
-		//$title = $addslashes(trim($title));
-		//$description = $addslashes(trim($description));
-		
-		if ($title == '')
-		{
-			$missing_fields[] = _AT('title');
-		}
-
-		if ($missing_fields)
-		{
-			$missing_fields = implode(', ', $missing_fields);
-			$msg->addError(array('EMPTY_FIELDS', $missing_fields));
-		}
-
-		if (!$msg->containsErrors())
-		{
-			/* insert into the db */
-			$sql = "INSERT INTO ".TABLE_PREFIX."user_groups
-			              (title,
-			               description,
-			               create_date
-			               )
-			       VALUES ('".$title."',
-			               '".$description."',
-			               now()
-			              )";
-
-			if (!$this->execute($sql))
-			{
-				$msg->addError('DB_NOT_UPDATED');
-				return false;
-			}
-			else
-			{
-				return mysql_insert_id();
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * Update an existing user group
-	 * @access  public
-	 * @param   user_group_id
-	 *          title
-	 *          description
-	 * @return  user id, if successful
-	 *          false and add error into global var $msg, if unsuccessful
-	 * @author  Cindy Qi Li
-	 */
-	public function Update($user_group_id, $title, $description)
-	{
-		global $addslashes, $msg;
-
-		$missing_fields = array();
-
-		/* email check */
-		$user_group_id = intval($user_group_id);
-		$title = $addslashes(trim($title));
-		$description = $addslashes(trim($description));
-		
-		/* login name check */
-		if ($title == '')
-		{
-			$missing_fields[] = _AT('title');
-		}
-
-		if ($missing_fields)
-		{
-			$missing_fields = implode(', ', $missing_fields);
-			$msg->addError(array('EMPTY_FIELDS', $missing_fields));
-		}
-
-		if (!$msg->containsErrors())
-		{
-			/* insert into the db */
-			$sql = "UPDATE ".TABLE_PREFIX."user_groups
-			           SET title = '".$title."',
-			               description = '".$description."',
-			               last_update = now()
-			         WHERE user_group_id = ".$user_group_id;
-
-			return $this->execute($sql);
-		}
-	}
-
-	/**
 	 * Update an existing user group record
 	 * @access  public
 	 * @param   userGroupID: user group ID
@@ -135,7 +31,7 @@ class SharedContentDAO extends DAO {
 	 *          fieldValue: the value to update
 	 * @return  true if successful
 	 *          error message array if failed; false if update db failed
-	 * @author  Cindy Qi Li
+	 * @author  Ayush Datta
 	 */
 	public function UpdateField($userGroupID, $fieldName, $fieldValue)
 	{
@@ -154,9 +50,9 @@ class SharedContentDAO extends DAO {
 	/**
 	 * delete user group by given user id
 	 * @access  public
-	 * @param   user group id
+	 * @param   group name
 	 * @return  true / false
-	 * @author  Cindy Qi Li
+	 * @author  Ayush Datta
 	 */
 	public function Delete($Group_name)
 	{
@@ -176,26 +72,16 @@ class SharedContentDAO extends DAO {
 		$sql = 'SELECT * FROM '.TABLE_PREFIX.'group_users ORDER BY group_name';
 		return $this->execute($sql);
 	}
-
-	/**
-	 * Return user information by given user id
+        
+        /**
+	 * Validate if the content is shared with the logged in user.
 	 * @access  public
-	 * @param   user group id
-	 * @return  user row
-	 * @author  Cindy Qi Li
+	 * @param   user id, content id
+	 * @return  Returns true if content is shared with logged in user
+	 * @author  Ayush Datta
 	 */
-	public function getUserGroupByID($user_group_id)
-		{
-		$user_group_id = intval($user_group_id);
-		$sql = 'SELECT * FROM '.TABLE_PREFIX.'user_groups WHERE user_group_id='.$user_group_id;
-		if ($rows = $this->execute($sql))
-		{
-			return $rows[0];
-		}
-	}
-
 	public function isShared($user_id, $cid)
-		{
+	{
 		$user_id = intval($user_id);
 		$cid = intval($cid);
 		$sql="SELECT content_id FROM ".TABLE_PREFIX."shared_content_group scg, ".TABLE_PREFIX."group_users gu WHERE scg.group_name=gu.group_name AND scg.group_creator=gu.group_creator AND gu.user_id=$user_id AND scg.content_id=$cid";
@@ -209,6 +95,32 @@ class SharedContentDAO extends DAO {
 		else{
 			return false;
 		}
+	}
+        
+        /**
+	 * Returns all the content shared with the logged in user in any group
+	 * @access  public
+	 * @param   logged in user_id
+	 * @return  Returns all the content shared with the logged in user
+	 * @author  Ayush Datta
+	 */
+	public function getAllContentSharedGroup($session_user_id)
+	{
+            $sql="SELECT DISTINCT(content_id), gu.group_creator AS content_author_id FROM ".TABLE_PREFIX."shared_content_group scg, ".TABLE_PREFIX."group_users gu WHERE scg.group_name=gu.group_name AND scg.group_creator=gu.group_creator AND gu.user_id=$session_user_id ORDER BY content_id";
+            return $this->execute($sql);
+	}
+        
+        /**
+	 * Returns all the content shared with the logged in user
+	 * @access  public
+	 * @param   logged in user_id
+	 * @return  Returns all the content shared with the logged in user
+	 * @author  Ayush Datta
+	 */
+	public function getAllContentShared($session_user_id)
+	{
+            $sql="SELECT DISTINCT(content_id), content_author_id FROM ".TABLE_PREFIX."shared_content WHERE user_id=$session_user_id ORDER BY content_id";
+            return $this->execute($sql);
 	}
 }
 ?>

@@ -22,7 +22,6 @@ if ( isset($_current_user) )
 		<h3><u>Shared Content with you</u></h3><br>
 		<table><tbody>
 		<?php
-		$output = '';
 		$session_user_id = $_SESSION['user_id'];
 		// retrieve data to display
 		$courseContentDAO = new ContentDAO();
@@ -31,14 +30,15 @@ if ( isset($_current_user) )
 			if($row['content_author_id']===$session_user_id){
 				continue;
 			}
-			$output .= "<tr><td>";
+			echo "<tr><td>";
 			$currCourse = $courseContentDAO->get($row['content_id']);
-			$output .= "<a href='".TR_BASE_HREF."home/course/content.php?_cid=".$currCourse['content_id']."'>".$currCourse['title']."</a>";
-                        $output .= " by ".$usersDao->getUserName($row['content_author_id']);
-			$output .= "&nbsp;&nbsp; <input type='button' value='Edit' onclick=\"document.location.href='".TR_BASE_HREF."home/editor/edit_content.php?_cid=".$currCourse['content_id']."';\"/>";
-			$output .= "</td></tr>";
+			echo "<a href='".TR_BASE_HREF."home/course/content.php?_cid=".$currCourse['content_id']."'>".$currCourse['title']."</a>";
+                        echo $output;
+                        echo _AT('shared_with_me',$usersDao->getUserName($row['content_author_id']));
+			echo "&nbsp;&nbsp; <input type='button' value='"._AT('edit')."' onclick=\"document.location.href='".TR_BASE_HREF."home/editor/edit_content.php?_cid=".$currCourse['content_id']."';\"/>";
+			echo "</td></tr>";
 		}
-		echo $output;
+		
 		?>
 		</tbody></table>
 		</form>
