@@ -18,7 +18,8 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 {
 	extract($_GET);
 ?>
-	<div class="input-form">
+<div class="input-form">
+	<div style="margin-left:5%;">
 		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']."?_course_id=$_course_id&_cid=$_cid"; ?>" method="POST">
 		<h3><u>Select Content</u></h3><br>
 		<table><tbody>
@@ -46,25 +47,32 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 			if ($row['role'] == TR_USERROLE_AUTHOR) {
 				$output .= "<tr><td><h4>".$courseDetails['title']."</h4></td></tr>";
 				$contents=$courseContentDAO->getContentByCourseID($courseDetails['course_id']);
-				foreach($contents as $content){
-					$output .= "<tr><td>";
-					for($i=0; $i<$num_spaces[$content['content_parent_id']];$i++){
-						$output .= "<img src='".$_base_path."images/tree/tree_space.gif'>";
+				function getHtmlTree($contentStructure, $parent, &$output, &$num_spaces, $_course_id){
+					foreach($contentStructure as $content){
+						if($content['content_parent_id']===$parent){
+							$output .= "<tr><td>";
+							for($i=0; $i<$num_spaces[$content['content_parent_id']];$i++){
+								$output .= "<img src='".$_base_path."images/tree/tree_space.gif'>";
+							}
+							$output .= "
+								<img src='".$_base_path."images/tree/tree_end.gif'>
+								<img src='".$_base_path."images/tree/tree_horizontal.gif'>
+							";
+							if($content['content_type']==CONTENT_TYPE_CONTENT){
+								$output .= "<a href='".$_SERVER['PHP_SELF']."?_course_id=$_course_id&_cid=".$content['content_id']."'>".$content['title']."</a>";
+							}
+							else if($content['content_type']==CONTENT_TYPE_FOLDER){
+								$output .= "<strong>".$content['title']."</strong>";
+								$num_spaces[$content['content_id']]=$num_spaces[$content['content_parent_id']]+1;
+								getHtmlTree($contentStructure, $content['content_id'], $output, $num_spaces, $_course_id);
+							}
+							$output .= "</td></tr>";
+						}
 					}
-					$output .= "
-						<img src='".$_base_path."images/tree/tree_end.gif'>
-						<img src='".$_base_path."images/tree/tree_horizontal.gif'>
-					";
-					if($content['content_type']==CONTENT_TYPE_CONTENT){
-						//$output .= "<input name=\"share_content_id[]\" value=".$content['content_id']." type=\"checkbox\">".$content['title'];
-						$output .= "<a href='".$_SERVER['PHP_SELF']."?_course_id=$_course_id&_cid=".$content['content_id']."'>".$content['title']."</a>";
-					}
-					else if($content['content_type']==CONTENT_TYPE_FOLDER){
-						$output .= "<strong>".$content['title']."</strong>";
-						$num_spaces[$content['content_id']]=$num_spaces[$content['content_parent_id']]+1;
-					}
-					$output .= "</td></tr>";
 				}
+
+				getHtmlTree($contents, "0", $output, $num_spaces, $_course_id);
+
 			} else {
 				echo "You Are Not the Author Of this course";
 			}
@@ -155,7 +163,7 @@ if (isset($_current_user) && ($_current_user->isAuthor() || $_current_user->isAd
 		?>
 		</form>
 	</div>
-
+</div>
 <script language="javascript" type="text/javascript">
 function openWindow(page) {
 	newWindow = window.open(page, "progWin", "width=400,height=200,toolbar=no,location=no");
