@@ -22,21 +22,21 @@ $dao = new DAO();
 $groupsUsersDAO = new GroupsUsersDAO();
 $group_creator=$_SESSION['user_id'];
 
-if ( (isset($_GET['edit']) || isset($_GET['view'])) && (isset($_GET['id']) && count($_GET['id']) > 1) ) {
+if ( (isset($_GET['edit']) || isset($_GET['view'])) && (isset($_GET['group_name']) && count($_GET['group_name']) > 1) ) {
 	$msg->addError('SELECT_ONE_ITEM');
 }
-else if (isset($_GET['edit'], $_GET['id'])) {
-	header('Location: edit_user_group.php?id='.$_GET['id'][0]);
+else if (isset($_GET['edit'], $_GET['group_name'])) {
+	header('Location: edit_user_group.php?group_name='.$_GET['group_name'][0]);
 	exit;
-} else if (isset($_GET['view'], $_GET['id'])) {
-	header('Location: view_user_group.php?id='.$_GET['id'][0]);
+} else if (isset($_GET['view'], $_GET['group_name'])) {
+	header('Location: view_user_group.php?group_name='.$_GET['group_name'][0]);
 	exit;
-} else if ( isset($_GET['delete'], $_GET['id'])) {
-	$ids = implode(',', $_GET['id']);
-	header('Location: usergroup_delete.php?id='.$ids);
+} else if ( isset($_GET['delete'], $_GET['group_name'])) {
+	$group_names = implode(',', $_GET['group_name']);
+	header('Location: usergroup_delete.php?group_name='.$group_names);
 	exit;
 }
-else if( (isset($_GET['edit']) || isset($_GET['delete']) || isset($_GET['view'])) && (!isset($_GET['id']))){
+else if( (isset($_GET['edit']) || isset($_GET['delete']) || isset($_GET['view'])) && (!isset($_GET['group_name']))){
 	$msg->addError('NO_ITEM_SELECTED');
 }
 

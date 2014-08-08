@@ -25,9 +25,9 @@ $groups_users=new GroupsUsersDAO();
 if ($_GET['reset_filter']) {
 	unset($_GET);
 }
-if(isset($_GET['id']))
+if(isset($_GET['group_name']))
 {
-    $group_name=$_GET['id'];
+    $group_name=$_GET['group_name'];
     $_SESSION['group_name']=$group_name;
 }
 else
@@ -41,8 +41,7 @@ if( (isset($_POST['modify_group'])) && (isset($_POST['id'])) && (isset($_SESSION
 	extract($_POST);
 	$group_creator=$_SESSION['user_id'];
         
-        $sql="DELETE FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator";
-        $result=$dao->execute($sql);
+        $groups_users->deleteGroup($group_name,$group_creator);
         
             for($i=0;$i<count($_POST['id']);$i++){
                     $groups_users->insertUsers($group_name, $group_creator, $id[$i]);
@@ -143,24 +142,6 @@ $sql = "SELECT user_id, first_name, last_name, email
           WHERE $search AND user_id!=$group_creator ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
-
-
-if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
-	$ids = '';
-	while ($row = mysql_fetch_assoc($result)) {
-		$ids .= $row['user_id'].','; 
-	}
-	$ids = substr($ids,0,-1);
-	$status = intval($_GET['change_status']);
-
-	if ($status==-1) {
-		header('Location: user_delete.php?id='.$ids);
-		exit;
-	} else {
-		header('Location: user_status.php?ids='.$ids.'&status='.$status);
-		exit;
-	}
-}
 
 $userGroupsDAO = new UserGroupsDAO();
 

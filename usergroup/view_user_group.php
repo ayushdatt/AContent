@@ -23,11 +23,9 @@ $dao = new DAO();
 if ($_GET['reset_filter']) {
 	unset($_GET);
 }
-if(isset($_GET['id']))
+if(isset($_GET['group_name']))
 {
-    $group_name=$_GET['id'];
-    $savant->assign('group_name', $group_name);
-    $group_name="'$group_name'";
+    $group_name=$_GET['group_name'];
     $_SESSION['group_name']=$group_name;
 }
 else
@@ -87,7 +85,7 @@ if ($_GET['search']) {
 	$search = '1';
 }
 $sql	= "SELECT COUNT(GU.user_id) AS cnt FROM ".TABLE_PREFIX."users U , ".TABLE_PREFIX."group_users GU"
-        . "  WHERE U.user_id=GU.user_id AND $search AND GU.group_creator=$group_creator AND GU.group_name=$group_name";
+        . "  WHERE U.user_id=GU.user_id AND $search AND GU.group_creator=$group_creator AND GU.group_name='$group_name'";
 
 $rows = $dao->execute($sql);
 $num_results = $rows[0]['cnt'];
@@ -107,26 +105,9 @@ if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
 
 $sql = "SELECT U.user_id, U.first_name, U.last_name, U.email
           FROM ".TABLE_PREFIX."users U,".TABLE_PREFIX."group_users GU"
-          . " WHERE U.user_id=GU.user_id AND GU.group_creator=$group_creator AND GU.group_name=$group_name AND $search ORDER BY $col $order LIMIT $offset, $results_per_page";
+          . " WHERE U.user_id=GU.user_id AND GU.group_creator=$group_creator AND GU.group_name='$group_name' AND $search ORDER BY $col $order LIMIT $offset, $results_per_page";
 
 $user_rows = $dao->execute($sql);
-
-if ( isset($_GET['apply_all']) && $_GET['change_status'] >= -1) {
-	$ids = '';
-	while ($row = mysql_fetch_assoc($result)) {
-		$ids .= $row['user_id'].','; 
-	}
-	$ids = substr($ids,0,-1);
-	$status = intval($_GET['change_status']);
-
-	if ($status==-1) {
-		header('Location: user_delete.php?id='.$ids);
-		exit;
-	} else {
-		header('Location: user_status.php?ids='.$ids.'&status='.$status);
-		exit;
-	}
-}
 
 $userGroupsDAO = new UserGroupsDAO();
 
@@ -141,7 +122,7 @@ $savant->assign('page_string', $page_string);
 $savant->assign('orders', $orders);
 $savant->assign('order', $order);
 $savant->assign('col', $col);
-
+$savant->assign('group_name', $group_name);
 
 $savant->display('usergroup/view_user_group.tmpl.php');
 

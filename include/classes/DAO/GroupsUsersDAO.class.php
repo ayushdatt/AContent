@@ -38,7 +38,20 @@ class GroupsUsersDAO extends DAO {
                                                     VALUES ('".$group_name."',".$group_creator.",".$id.")";
             return $this->execute($sql);
         }
-	
+        
+	/**
+	 * Create a new user group
+	 * @access  public
+	 * @param   group_name: Name of the group
+	 *          group_creator: Current loggedin user
+	 * @return  true if successful
+         *          error message array if failed; false if update db failed
+	 * @author  Ayush Datta
+	 */
+        public function deleteGroup($group_name,$group_creator){
+            $sql="DELETE FROM ".TABLE_PREFIX."group_users WHERE group_name='$group_name' AND group_creator=$group_creator";
+            return $this->execute($sql);
+        }
         
 	/**
 	 * Update an existing user groupname 
@@ -73,7 +86,7 @@ class GroupsUsersDAO extends DAO {
 	 */
 	public function Delete($Group_name)
 	{
-		$sql = 'DELETE FROM '.TABLE_PREFIX.'group_users WHERE group_name = '.$Group_name.' AND group_creator='.$_SESSION['user_id'];	
+		$sql = "DELETE FROM ".TABLE_PREFIX."group_users WHERE group_name = '$Group_name' AND group_creator=".$_SESSION['user_id'];	
 		return $this->execute($sql);
 	}
 	

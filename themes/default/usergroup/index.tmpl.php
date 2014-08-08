@@ -81,7 +81,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 			<tr onmousedown="document.form['m<?php echo $row['group_name']; ?>'].checked = !document.form['m<?php echo $row['group_name']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['group_name']; ?>');" 
 			    onkeydown="document.form['m<?php echo $row['group_name']; ?>'].checked = !document.form['m<?php echo $row['group_name']; ?>'].checked; togglerowhighlight(this, 'm<?php echo $row['group_name']; ?>');"
 			    id="rm<?php echo $row['group_name']; ?>">
-				<td><input type="checkbox" name="id[]" value="<?php echo $row['group_name']; ?>" id="m<?php echo $row['group_name']; ?>" 
+				<td><input type="checkbox" name="group_name[]" value="<?php echo $row['group_name']; ?>" id="m<?php echo $row['group_name']; ?>" 
 				           onmouseup="this.checked=!this.checked" onkeyup="this.checked=!this.checked" /></td>
 				<td><label for="m<?php echo $row['group_name']; ?>"><span class="inlineEdits" id="<?php echo "group_name-".$row['group_name']; ?>"><?php echo $row['group_name']; ?></span></label></td>
 			</tr>

@@ -17,7 +17,7 @@ include_once(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 
 $groupsusersDAO = new GroupsUsersDAO();
 
-$group_names = explode(',', $_REQUEST['id']);
+$group_names = explode(',', $_REQUEST['group_name']);
 
 if (isset($_POST['submit_no'])) 
 {
@@ -29,7 +29,6 @@ else if (isset($_POST['submit_yes']))
 {
 	foreach($group_names as $group_name) 
 	{
-                $group_name="'$group_name'";
 		$groupsusersDAO->Delete($group_name);
 	}
 
@@ -42,14 +41,9 @@ require(TR_INCLUDE_PATH.'header.inc.php');
 
 unset($hidden_vars);
 
-/*foreach($ids as $id) 
-{
-	$names[] = $usersDAO->getUserName($id);
-}
-*/
 
 $names_html = '<ul>'.html_get_list($group_names).'</ul>';
-$hidden_vars['id'] = $_REQUEST['id'];
+$hidden_vars['group_name'] = $_REQUEST['group_name'];
 
 $msg->addConfirm(array('DELETE_USER', $names_html), $hidden_vars);
 $msg->printConfirm();
