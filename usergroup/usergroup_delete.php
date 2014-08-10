@@ -45,7 +45,7 @@ unset($hidden_vars);
 $names_html = '<ul>'.html_get_list($group_names).'</ul>';
 $hidden_vars['group_name'] = $_REQUEST['group_name'];
 
-$msg->addConfirm(array('DELETE_USER', $names_html), $hidden_vars);
+$msg->addConfirm(array('DELETE_USER_GROUP', $names_html), $hidden_vars);
 $msg->printConfirm();
 
 require(TR_INCLUDE_PATH.'footer.inc.php');

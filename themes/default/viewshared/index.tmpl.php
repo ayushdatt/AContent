@@ -19,7 +19,7 @@ if ( isset($_current_user) )
 ?>
 	<div class="input-form">
 		<form id="share_content" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-		<h3><u>Shared Content with you</u></h3><br>
+                    <h3><u><?php echo _AT('pages_shared_with_me')?></u></h3><br>
 		<table><tbody>
 		<?php
 		$session_user_id = $_SESSION['user_id'];
@@ -33,7 +33,8 @@ if ( isset($_current_user) )
 			echo "<tr><td>";
 			$currCourse = $courseContentDAO->get($row['content_id']);
 			echo "<a href='".TR_BASE_HREF."home/course/content.php?_cid=".$currCourse['content_id']."'>".$currCourse['title']."</a>";
-                        echo $output;
+                        //echo $output;
+                        echo _AT('under_lesson',$row['course_title']);
                         echo _AT('shared_with_me',$usersDao->getUserName($row['content_author_id']));
 			echo "&nbsp;&nbsp; <input type='button' value='"._AT('edit')."' onclick=\"document.location.href='".TR_BASE_HREF."home/editor/edit_content.php?_cid=".$currCourse['content_id']."';\"/>";
 			echo "</td></tr>";

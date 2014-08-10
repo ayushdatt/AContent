@@ -24,21 +24,39 @@ if(isset($vid1) && isset($vid2) && isset($cid));
 else{
     header('Location: index.php');
 }
-
+echo _AT('view_differences');
 ?>
-View Differences:
 <select name="difftype" onchange="javascript: submit()">
 <option value="side"<?php if(($_POST['difftype']=="side") || (!$_POST['difftype'])){
 echo "selected='selected'";
 }?>><?php echo _AT('side_by_side'); ?></option>
 <option value="inline" <?php if($_POST['difftype']=="inline") echo "selected='selected'";?>><?php echo _AT('inline'); ?></option>
 </select>
+
+<select name="difftype1" onchange="javascript: submit()">
+<option value="html"<?php if(($_POST['difftype1']=="html") || (!$_POST['difftype1'])){
+echo "selected='selected'";
+}?>><?php echo _AT('html'); ?></option>
+
+<option value="text" <?php if($_POST['difftype1']=="text") echo "selected='selected'";?>><?php echo _AT('text'); ?></option>
+</select>
+
 <?php
    if(isset($_POST['difftype'])){
-       html_diff($cid,$vid2,$vid1,$_POST['difftype']); 
+       if(isset($_POST['difftype1'])){
+           html_diff($cid,$vid2,$vid1,$_POST['difftype'],$_POST['difftype1']); 
+       }
+       else{
+           html_diff($cid,$vid2,$vid1,$_POST['difftype']); 
+       }
    }
    else{
-       html_diff($cid,$vid2,$vid1); 
+       if(isset($_POST['difftype1'])){
+           html_diff($cid,$vid2,$vid1,null,$_POST['difftype1']); 
+       }
+       else{
+           html_diff($cid,$vid2,$vid1); 
+       }
    }
 ?>
 </fieldset>

@@ -106,7 +106,7 @@ class SharedContentDAO extends DAO {
 	 */
 	public function getAllContentSharedGroup($session_user_id)
 	{
-            $sql="SELECT DISTINCT(content_id), gu.group_creator AS content_author_id FROM ".TABLE_PREFIX."shared_content_group scg, ".TABLE_PREFIX."group_users gu WHERE scg.group_name=gu.group_name AND scg.group_creator=gu.group_creator AND gu.user_id=$session_user_id ORDER BY content_id";
+            $sql="SELECT DISTINCT(scg.content_id), gu.group_creator AS content_author_id, cu.title AS course_title FROM ".TABLE_PREFIX."shared_content_group scg, ".TABLE_PREFIX."group_users gu, ".TABLE_PREFIX."courses cu, ".TABLE_PREFIX."content c WHERE scg.group_name=gu.group_name AND scg.group_creator=gu.group_creator AND gu.user_id=$session_user_id AND scg.content_id = c.content_id AND c.course_id = cu.course_id ORDER BY content_id";
             return $this->execute($sql);
 	}
         
@@ -119,7 +119,7 @@ class SharedContentDAO extends DAO {
 	 */
 	public function getAllContentShared($session_user_id)
 	{
-            $sql="SELECT DISTINCT(content_id), content_author_id FROM ".TABLE_PREFIX."shared_content WHERE user_id=$session_user_id ORDER BY content_id";
+            $sql="SELECT DISTINCT(s.content_id), s.content_author_id AS content_author_id, cu.title AS course_title FROM ".TABLE_PREFIX."shared_content s, ".TABLE_PREFIX."courses cu, ".TABLE_PREFIX."content c  WHERE s.user_id=$session_user_id  AND s.content_id = c.content_id AND c.course_id = cu.course_id ORDER BY s.content_id";
             return $this->execute($sql);
 	}
 }

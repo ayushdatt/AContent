@@ -7,12 +7,16 @@ require_once(TR_INCLUDE_PATH.'classes/Versioning/Versions.class.php');
 include './DifferenceEngine.php';
 include './common.php';
 
-function html_diff($cid, $l_vid, $r_vid, $type=null){
+function html_diff($cid, $l_vid, $r_vid, $type=null, $type1=null){
     $versions=new Versions();
     $l_text=$versions->get_Version_text($cid,$l_vid);
     $r_text=$versions->get_Version_text($cid,$r_vid);
     //$type = 'inline';
-
+    if($type1=="text"){
+    $l_text = trim(strip_tags($l_text));
+    $r_text = trim(strip_tags($r_text));
+    }
+    
     $df = new Diff(explode("\n",$l_text),explode("\n",$r_text));
     if($type == 'inline'){
         $tdf = new InlineDiffFormatter();

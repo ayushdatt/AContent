@@ -104,7 +104,7 @@ include(TR_INCLUDE_PATH.'header.inc.php');
 function CheckAll() {
 	for (var i=0;i<document.form.elements.length;i++)	{
 		var e = document.form.elements[i];
-		if ((e.name == 'id[]') && (e.type=='checkbox')) {
+		if ((e.name == 'group_name[]') && (e.type=='checkbox')) {
 			e.checked = document.form.selectall.checked;
 			togglerowhighlight(document.getElementById("r" + e.id), e.id);
 		}
