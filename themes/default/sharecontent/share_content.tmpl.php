@@ -182,12 +182,11 @@
                 </tbody>
             </table>
         </div>
-        <input type="submit" value="Share Content" style="margin-left:20px">
+        <input type="submit" name="share_submit" value="Share Content" style="margin-left:20px">
     </form>
 </div>
 <script language="javascript" type="text/javascript">
     function recursiveSelect(id){
-        alert(id);
         // Whenever the parent checkbox is checked/unchecked
         // save state of parent
         c = $("#"+id).is(':checked');

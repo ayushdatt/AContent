@@ -63,6 +63,8 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 		    }
 	    }
 	}
+        $msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
+        //header('Location: index.php/?_course_id='.$_GET['_course_id']);
 }
 require(TR_INCLUDE_PATH.'header.inc.php');
 extract($_GET);
