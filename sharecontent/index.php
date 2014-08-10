@@ -18,29 +18,17 @@ include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 // make sure the user has author privilege
 Utility::authenticate(TR_PRIV_ISAUTHOR);
 // get a list of authors if admin is creating a lesson	
-require(TR_INCLUDE_PATH.'header.inc.php');
+
 
 $dao = new DAO();
 global $msg;
 $session_user_id = $_SESSION['user_id'];
-/*if(isset($_POST['share_submit'])){
-    echo "submitted";
-}
-if(isset($_POST['share_content_id']))
-{
-    echo "getting id";
-    print_r($_POST['share_content_id']);
-}   */ 
 
 if(isset($_POST['share_submit']) && (!isset($_POST['share_content_id']))){
-    //echo "no id found";
     $msg->addError('NO_CONTENT_SELECTED_TO_SHARE');
-    header('Location: index.php');
 }
 if( isset($_POST['share_submit']) && (!isset($_POST['share_group_name'])) && (!isset($_POST['share_user_id'])) ){
     $msg->addError('NOBODY_TO_SHARE_WITH');
-    //echo 'no user found';
-    header('Location: index.php');
 }
 if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name'])) || (isset($_POST['share_user_id'])) ) ){
     	extract($_POST);
@@ -76,7 +64,7 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 	    }
 	}
 }
-
+require(TR_INCLUDE_PATH.'header.inc.php');
 extract($_GET);
 $savant->assign('selected_course', $_course_id);
 $savant->display('sharecontent/index.tmpl.php');
