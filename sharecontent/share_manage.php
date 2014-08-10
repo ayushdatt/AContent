@@ -14,19 +14,24 @@
 define('TR_INCLUDE_PATH', '../include/');
 require(TR_INCLUDE_PATH.'vitals.inc.php');
 require_once(TR_INCLUDE_PATH.'classes/Utility.class.php');
-include(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
+include_once(TR_INCLUDE_PATH.'classes/DAO/UserGroupsDAO.class.php');
 $dao = new DAO();
 // make sure the user has author privilege
 Utility::authenticate(TR_PRIV_ISAUTHOR);
 
 // get a list of authors if admin is creating a lesson	
 
-require(TR_INCLUDE_PATH.'header.inc.php');
-
 extract($_GET);
 extract($_POST);
 
 $dao = new DAO();
+if( (isset($_POST['revoke'])) && (!isset($_cid)) ){
+    $msg->addError('NO_CONTENT_SELECTED_TO_REVOKE_ACCESS');
+}
+else if( (isset($_POST['revoke'])) && (!isset($_POST['revoke_group_name'])) && (!isset($_POST['revoke_user_id']))){
+    $msg->addError('NOBODY_TO_SHARE_WITH');
+}
+
 $session_user_id = $_SESSION['user_id'];
 if( (isset($_cid)) && ( (isset($_POST['revoke_group_name'])) || (isset($_POST['revoke_user_id'])) ) ){
 	if( (isset($_POST['revoke_group_name'])) ){
@@ -49,6 +54,7 @@ if( (isset($_cid)) && ( (isset($_POST['revoke_group_name'])) || (isset($_POST['r
 			}
 	    }
 	}
+        $msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
 }
 
 if($_cid){
@@ -63,6 +69,7 @@ if($_cid){
 		$savant->assign('shared_groups', $result);
 	}
 }
+require(TR_INCLUDE_PATH.'header.inc.php');
 $savant->assign('selected_course', $_course_id);
 $savant->display('sharecontent/share_manage.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');

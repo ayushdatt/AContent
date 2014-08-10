@@ -96,6 +96,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_msgs', 'TR_ERROR_NOT_LOCALHOST', 'Sorry, the IP address of localhost is not public. For security reasons, validating resources located at non-public IP addresses has been disabled in this service.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_NO_ACTION_SELECTED', 'No action selected.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_NO_CONTENT_SELECTED_TO_SHARE', 'You must select a content to share', '2014-01-27 15:48:35', 'error msg'),
+('en', '_msgs', 'TR_ERROR_NO_CONTENT_SELECTED_TO_REVOKE_ACCESS', 'You must select a content to revove access', '2014-01-27 15:48:35', 'error msg'),
 ('en', '_msgs', 'TR_ERROR_NO_CONTENT_SPACE', 'Not enough space to import content directory. %s KB over the limit.', '2010-01-27 15:48:35', 'error msg'),
 ('en', '_msgs', 'TR_ERROR_NO_ITEM_SELECTED', 'You must select an item before using a button.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_NO_PRIV', 'User has no privilege to do this action.', '2010-02-19 14:18:02', ''),
