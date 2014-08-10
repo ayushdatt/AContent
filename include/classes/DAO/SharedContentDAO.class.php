@@ -13,7 +13,7 @@
 /**
  * DAO for "user_groups" table
  * @access	public
- * @author	Cindy Qi Li
+ * @author	Ayush Datta
  * @package	DAO
  */
 
