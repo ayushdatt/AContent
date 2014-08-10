@@ -22,8 +22,6 @@
         <div class="input-form" style="margin-top: 20px;">
             <h3><u><?php echo _AT('select_content_to_share');?></u></h3>
             <br>
-            <table>
-                <tbody>
                     <?php
                         $userCoursesDAO = new UserCoursesDAO();
                         $output = '';
@@ -46,14 +44,14 @@
                         	$num_spaces[0]=0;
                         	// only display the first 200 character of course description
                         	if ($row['role'] == TR_USERROLE_AUTHOR) {
-                        		$output .= "<tr><td><h4>".$courseDetails['title']."</h4></td></tr>";
+                        		$output .= "<div><input id=\"-1\" type=\"checkbox\" onclick=\"recursiveSelect(-1)\"><strong>".$courseDetails['title']."</strong>";
                         		$contents=$courseContentDAO->getContentByCourseID($courseDetails['course_id']);
                         
                         		function getHtmlTree($contentStructure, $parent, &$output, &$num_spaces){
                         			//print_r($contentStructure);
                         			foreach($contentStructure as $content){
                         				if($content['content_parent_id']===$parent){
-                        					$output .= "<tr><td>";
+                                            $output .= "<div>";
                         					for($i=0; $i<$num_spaces[$content['content_parent_id']];$i++){
                         						$output .= "<img src='".$_base_path."images/tree/tree_space.gif'>";
                         					}
@@ -63,27 +61,25 @@
                         					";
                         					if($content['content_type']==CONTENT_TYPE_CONTENT){
                         						$output .= "<input name=\"share_content_id[]\" value=\"".$content['content_id']."\" type=\"checkbox\">".$content['title'];
-                        					}
+                                            }
                         					else if($content['content_type']==CONTENT_TYPE_FOLDER){
+                                                $output .= "<input id=\"".$content['content_id']."\" type=\"checkbox\" onclick=\"recursiveSelect(".$content['content_id'].")\">";
                         						$output .= "<strong>".$content['title']."</strong>";
                         						$num_spaces[$content['content_id']]=$num_spaces[$content['content_parent_id']]+1;
-                        						getHtmlTree($contentStructure, $content['content_id'], $output, $num_spaces);
+                                                getHtmlTree($contentStructure, $content['content_id'], $output, $num_spaces);
                         					}
-                        					$output .= "</td></tr>";
+                                            $output .= "</div>";
                         				}
                         			}
                         		}
-                        
                         		getHtmlTree($contents, "0", $output, $num_spaces);
-                        
                         	} else {
                         		echo "You Are Not the Author Of this course";
                         	}
                         }
                         echo $output;
+                        echo "</div>";
                         ?>
-                </tbody>
-            </table>
         </div>
         <div class="input-form" style="margin-bottom: 10px">
             <table>
@@ -190,9 +186,16 @@
     </form>
 </div>
 <script language="javascript" type="text/javascript">
-    function openWindow(page) {
-    	newWindow = window.open(page, "progWin", "width=400,height=200,toolbar=no,location=no");
-    	newWindow.focus();
+    function recursiveSelect(id){
+        alert(id);
+        // Whenever the parent checkbox is checked/unchecked
+        // save state of parent
+        c = $("#"+id).is(':checked');
+        console.log($("#"+id).parent().find("input[type=checkbox]"));
+        $("#"+id).parent().find("input[type=checkbox]").each(function() {
+            // set state of siblings
+            $(this).attr('checked', c);
+        });
     }
 </script>
 <?php 

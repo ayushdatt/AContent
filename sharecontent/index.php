@@ -67,6 +67,6 @@ if( (isset($_POST['share_content_id'])) && ( (isset($_POST['share_group_name']))
 require(TR_INCLUDE_PATH.'header.inc.php');
 extract($_GET);
 $savant->assign('selected_course', $_course_id);
-$savant->display('sharecontent/index.tmpl.php');
+$savant->display('sharecontent/share_content.tmpl.php');
 require(TR_INCLUDE_PATH.'footer.inc.php');
 ?>
