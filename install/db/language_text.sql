@@ -118,6 +118,7 @@ INSERT INTO `language_text` VALUES ('en', '_msgs', 'TR_CONFIRM_ADD_TEST_QUESTION
 ('en', '_msgs', 'TR_ERROR_SAVE_BEFORE_PROCEED', 'Please save the content before proceeding.', '2012-12-05 11:09:50', ''),
 ('en', '_msgs', 'TR_ERROR_SECRET_ERROR', 'Letters or numbers entered from the CAPTCHA image are incorrect. Try again.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_SELECT_ONE_ITEM', 'Only <em>one</em> item must be selected.', '2010-01-27 15:48:35', ''),
+('en', '_msgs', 'TR_ERROR_SELECT_USER_OR_GROUP_TO_REVOKE_ACCESS', 'Select user or group to revoke access', '2014-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_SENDING_ERROR', 'There was an error sending the email message.', '2010-01-27 15:48:35', ''),
 ('en', '_msgs', 'TR_ERROR_UNABLE_UPDATE_DB', 'Unable to update DB.', '2010-02-04 13:14:33', ''),
 ('en', '_msgs', 'TR_ERROR_UNKNOWN', 'An undetermined error has occurred.', '2010-04-01 15:23:52', ''),

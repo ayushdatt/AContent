@@ -25,11 +25,11 @@ extract($_GET);
 extract($_POST);
 
 $dao = new DAO();
-if( (isset($_POST['revoke'])) && (!isset($_cid)) ){
+if( (isset($_POST['revoke'])) && ((!isset($_cid)) || ($_cid=='')) ){
     $msg->addError('NO_CONTENT_SELECTED_TO_REVOKE_ACCESS');
 }
 else if( (isset($_POST['revoke'])) && (!isset($_POST['revoke_group_name'])) && (!isset($_POST['revoke_user_id']))){
-    $msg->addError('NOBODY_TO_SHARE_WITH');
+    $msg->addError('SELECT_USER_OR_GROUP_TO_REVOKE_ACCESS');
 }
 
 $session_user_id = $_SESSION['user_id'];
