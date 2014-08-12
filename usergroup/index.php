@@ -16,6 +16,13 @@ include_once(TR_INCLUDE_PATH.'classes/DAO/GroupsUsersDAO.class.php');
 include_once(TR_INCLUDE_PATH.'classes/DAO/SharedContentDAO.class.php');
 unset($_SESSION['course_id']);
 
+if (!isset($_current_user))
+{
+	require(TR_INCLUDE_PATH.'header.inc.php');
+	$msg->printInfos('INVALID_USER');
+	require(TR_INCLUDE_PATH.'footer.inc.php');
+	exit;
+}
 // initialize constants
 $results_per_page = 50;
 $dao = new DAO();
