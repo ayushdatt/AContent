@@ -248,9 +248,8 @@ foreach ($this->top_level_pages as $page) {
       </li>
       <?php }
       if(isset($_GET['_cid'])){
-        $contentInfo = $contentDAO->get($_GET['_cid']);
-        $courseInfo = $coursesDAO->get($contentInfo['course_id']);
-        if( $_SESSION['user_id']===$courseInfo['user_id'] || $sharedContentDAO->isShared($_SESSION['user_id'],$_GET['_cid']) ) {
+        $courseInfo = $coursesDAO->get($this->course_id);
+        if( $_SESSION['user_id']===$courseInfo['user_id'] || $sharedContentDAO->isShared($_SESSION['user_id'],$_GET['_cid']) || ($this->isAdmin && $this->course_id != 1) ) {
           ?>
       <li><a href="<?php echo $this->base_path; ?>home/course/versions.php?_cid=<?php echo $_REQUEST['_cid']; ?>">
         <img src="<?php echo $this->base_path. "themes/".$this->theme."/images/versioning.png"; ?>" title="<?php echo _AT('revisions'); ?>" alt="<?php echo _AT('course_property'); ?>" border="0"  class="shortcut_icon"/>
