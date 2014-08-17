@@ -113,7 +113,7 @@ ul {
   margin-right: 0px;
 }
 li {
-  margin-bottom: 0px;
+  margin-bottom: 5px;
   margin-top: 0px;
   margin-right: 0px;
 }
@@ -447,6 +447,7 @@ div#sub-menu {
    font-size:0.85em; 
     border-top:1px solid #cccccc;
     height:2.1em;
+    margin-top: -0.4em
 }
 div#sub-navigation {
    float:left;
@@ -1072,7 +1073,6 @@ div.topnavlistcontainer {
   list-style: none;
   list-style-position:inside;
   display: inline-block;
-  margin: 0;
 }
 .navigation a:hover
 {
