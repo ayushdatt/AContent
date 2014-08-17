@@ -158,7 +158,7 @@ foreach ($this->top_level_pages as $page) {
       <li class="navigation"><a href="<?php echo $page['url']; ?>" title="<?php echo $page['title']; ?>" class="active"><?php echo $page['title']; ?></a></li>
 <?php } else { ?>
    <?php
-        if(!isset($this->course_id) && (strstr($page['url'],"tests") || strstr($page['url'],"file_manager"))){ 
+        if(!isset($this->course_id) && (strstr($page['url'],"tests") || strstr($page['url'],"file_manager")|| strstr($page['url'],"sharecontent"))){ 
          // don't display tests and file manager for admins when not in a lesson
          }else{ ?>
          <li class="navigation"><a href="<?php echo $page['url']; ?>"  title="<?php echo $page['title']; ?>"><?php echo $page['title']; ?></a></li>
