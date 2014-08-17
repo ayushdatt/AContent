@@ -315,12 +315,6 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
         $_pages['usergroup/edit_user_group.php']['title_var'] = 'edit_user_group';
 	$_pages['usergroup/edit_user_group.php']['parent']    = 'usergroup/index.php';
 	$_pages['usergroup/edit_user_group.php']['guide']    = 'TR_HELP_CREATE_EDIT_USER_GROUP';
-        /*Share Content
-	$_pages['usergroup/share_content.php']['title'] = 'Share Content';
-	$_pages['usergroup/share_content.php']['title_var'] = 'share_content';
-	$_pages['usergroup/share_content.php']['parent']    = 'usergroup/index.php';
-        $_pages['usergroup/share_content.php']['guide']    = 'TR_HELP_SHARE_CONTENT';
-         */ 
 }
 
 // language pages
@@ -416,7 +410,7 @@ if (array_key_exists(TR_PRIV_VIEW_SHARED_CONTENT, $privs) && Utility::authentica
 {
 	$_pages['viewshared/index.php']['title_var'] = 'view_shared';
 	$_pages['viewshared/index.php']['parent']    = TR_NAV_TOP;
-	$_pages['viewshared/index.php']['guide']     = 'TR_HELP_SHARE_CONTENT';
+	$_pages['viewshared/index.php']['guide']     = 'TR_HELP_VIEW_SHARED_CONTENT';
 }
 // manage tests
 if (array_key_exists(TR_PRIV_MANAGE_TESTS, $privs) && Utility::authenticate($privs[TR_PRIV_MANAGE_TESTS], false))
