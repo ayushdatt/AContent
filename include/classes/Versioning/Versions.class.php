@@ -15,6 +15,10 @@ class Versions {
     //put your code here
     var $varsionsDir,$atticDir,$metadir,$timeofversion,$meta;
     
+    function redirectBack(){
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
     function Versions(){
         $this->versionsDir = TR_CONTENT_DIR."versions/";
     	$this->atticDir = $this->versionsDir."attic/";
@@ -24,7 +28,7 @@ class Versions {
     
     function Create_Meta($cid, $flag, $version_id=null){
         $myFile = $this->metaDir.$cid.".txt";
-        $fp = fopen($myFile,'a') or die("cannot open file");
+        $fp = fopen($myFile,'a') or $this->redirectBack();
         if($version_id!=null){
             $flag='R';
             $dataToWrite = $this->timeofversion."\t".$_SESSION['user_id']."\t".$flag."\t".$version_id."\n";
@@ -41,7 +45,7 @@ class Versions {
     
     function Create_Versions($cid, $data){
         $myFile = $this->atticDir.$cid."_".$this->timeofversion.".txt.gz";
-    	$fp = gzopen($myFile,'w') or die("cannot open file");
+    	$fp = gzopen($myFile,'w') or $this->redirectBack();
     	$dataToWrite = $data['title']."\n".$data['body_text'];
     	gzwrite($fp, $dataToWrite);
         fclose($myFile);
@@ -51,7 +55,7 @@ class Versions {
     function get_Versions($cid)
     {
         $myFile = $this->metaDir.$cid.".txt";
-        $fp = fopen($myFile,'r') or die("cannot open file");
+        $fp = fopen($myFile,'r') or $this->redirectBack();
         $this->meta=array();
         while (!feof($fp)){
             $line = trim(fgets($fp));
@@ -85,10 +89,9 @@ class Versions {
     function get_Version_title($cid,$version_id)
     {
         $myFile = $this->atticDir.$cid."_".$version_id.".txt.gz";
-    	$fp = gzopen($myFile,'r') or die("cannot open file");
+    	$fp = gzopen($myFile,'r') or $this->redirectBack();
     	$title = trim(fgets($fp));
         fclose($fp);   
         return $title;
     }
-    
 }
