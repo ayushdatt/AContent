@@ -68,10 +68,17 @@ class Versions {
     function get_Version_text($cid,$version_id)
     {
         $myFile = $this->atticDir.$cid."_".$version_id.".txt.gz";
-    	$fp = gzopen($myFile,'r') or die("cannot open file");
-    	fgets($fp); //Ignores the first line in the revision file
-        $version_text=fread($fp,filesize($myFile));
-        fclose($fp);   
+        $lines = gzfile($myFile);
+        $version_text="";
+        $counter=0;
+        foreach ($lines as $line) {
+            if($counter===0){
+                $counter++;
+            }
+            else{
+                $version_text = $version_text.$line;
+            }
+        }
         return $version_text;
     }
     
