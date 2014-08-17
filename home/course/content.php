@@ -236,6 +236,10 @@ if ($_current_user) {
 	$savant->assign('isAdmin', $_current_user->isAdmin());
 }
 
+if(isset($_GET['cannotOpen']) && $_GET['cannotOpen']==="true"){
+	$msg->addError('CONTENT_LOCKED');
+}
+
 require(TR_INCLUDE_PATH.'header.inc.php');
 
 $savant->display('home/course/content.tmpl.php');

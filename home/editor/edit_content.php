@@ -33,7 +33,7 @@ if(isset($_content_id))
     $sharedContentLockingDAO = new SharedContentLockingDAO();
 
     if($sharedContentLockingDAO->insertUpdate($cid, $_SESSION['user_id'])==false){
-        header('Location: '.TR_BASE_HREF.'viewshared/index.php?cannotOpen=true');
+        header('Location: '.$_SERVER['HTTP_REFERER']);
     }
 }
 if ($_POST) {

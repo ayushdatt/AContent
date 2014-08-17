@@ -270,7 +270,7 @@ class ContentManager
 	    $sharedContentDAO = new SharedContentDAO();
             $sharedContentLockingDAO = new SharedContentLockingDAO();
             if($sharedContentLockingDAO->canEdit($_GET['_cid'], $_SESSION['user_id'])==false){
-                header('Location: '.TR_BASE_HREF.'viewshared/index.php');
+                header('Location: '. $_SERVER['HTTP_REFERER']);
             }
             if (!isset($_current_user) || ( !$_current_user->isAuthor($this->course_id) && !$sharedContentDAO->isShared($_current_user->userID, $_GET['_cid']) ) && !$_current_user->isAdmin()) {
 				return FALSE;
