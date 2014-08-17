@@ -295,13 +295,13 @@ if (array_key_exists(TR_PRIV_USER_GROUPS, $privs) && Utility::authenticate($priv
         
         //Existing User Groups
 	$_pages['usergroup/existing_usergroups.php']['title'] = 'Existing User Groups';
-	$_pages['usergroup/existing_usergroups.php']['title_var'] = 'Existing User Groups';
+	$_pages['usergroup/existing_usergroups.php']['title_var'] = 'existing_user_groups';
 	$_pages['usergroup/existing_usergroups.php']['parent']    = 'usergroup/index.php';
-        $_pages['usergroup/existing_usergroups.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
+        $_pages['usergroup/existing_usergroups.php']['guide']    = 'TR_HELP_EXISTING_USER_GROUP';
         
         //Create User Groups
 	$_pages['usergroup/create_author_user_group.php']['title'] = 'Create User Group';
-	$_pages['usergroup/create_author_user_group.php']['title_var'] = 'create_author_user_group';
+	$_pages['usergroup/create_author_user_group.php']['title_var'] = 'create_user_group';
 	$_pages['usergroup/create_author_user_group.php']['parent']    = 'usergroup/index.php';
         $_pages['usergroup/create_author_user_group.php']['guide']    = 'TR_HELP_CREATE_AUTHOR_USER_GROUP';
 	
@@ -396,16 +396,16 @@ if (array_key_exists(TR_PRIV_SHARE_CONTENT, $privs) && Utility::authenticate($pr
 {
 	$_pages['sharecontent/index.php']['title_var'] = 'share_content';
 	$_pages['sharecontent/index.php']['parent']    = TR_NAV_TOP;
-	$_pages['sharecontent/index.php']['guide']     = 'TR_HELP_SHARE_CONTENT';
+	$_pages['sharecontent/index.php']['guide']     = 'TR_HELP_SHARE_MANAGE_CONTENT';
 	$_pages['sharecontent/index.php']['children']  = array('sharecontent/share_content.php', 'sharecontent/share_manage.php');
 	
-	$_pages['sharecontent/share_content.php']['title'] = 'Share Pages';
-	$_pages['sharecontent/share_content.php']['title_var'] = 'Share Pages';
+	$_pages['sharecontent/share_content.php']['title'] = 'Share Content';
+	$_pages['sharecontent/share_content.php']['title_var'] = 'share_content';
 	$_pages['sharecontent/share_content.php']['parent']    = 'sharecontent/index.php';
         $_pages['sharecontent/share_content.php']['guide']    = 'TR_HELP_SHARE_CONTENT';
         
-        $_pages['sharecontent/share_manage.php']['title'] = 'Manage Shared Pages';
-	$_pages['sharecontent/share_manage.php']['title_var'] = 'Manage Shared Pages';
+        $_pages['sharecontent/share_manage.php']['title'] = 'Manage Shared Content';
+	$_pages['sharecontent/share_manage.php']['title_var'] = 'manage_shared_content';
 	$_pages['sharecontent/share_manage.php']['parent']    = 'sharecontent/index.php';
         $_pages['sharecontent/share_manage.php']['guide']    = 'TR_HELP_MANAGE_SHARE';
 }
