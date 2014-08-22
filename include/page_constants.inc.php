@@ -152,7 +152,7 @@ if (array_key_exists(TR_PRIV_HOME, $privs) && Utility::authenticate($privs[TR_PR
 
                 $_pages['home/course/versions_difference.php']['title_var'] = 'versions_difference';
 		$_pages['home/course/versions_difference.php']['parent']    = 'home/index.php';
-		$_pages['home/course/versions_difference.php']['guide']    = 'TR_HELP_VERSIONS';
+		$_pages['home/course/versions_difference.php']['guide']    = 'TR_HELP_DIFFERENCE_VERSIONS';
 
                 $_pages['home/editor/add_content.php']['title_var']    = 'add_content';
 		$_pages['home/editor/add_content.php']['parent']   = 'home/index.php'; 
